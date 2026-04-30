@@ -1,0 +1,49 @@
+{
+  "name": "vibeforge-site",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "npm run build:indexes && next build",
+    "start": "next start",
+    "build:indexes": "tsx scripts/build-indexes.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "15.1.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "gray-matter": "4.0.3",
+    "unified": "11.0.5",
+    "remark-parse": "11.0.0",
+    "remark-gfm": "4.0.0",
+    "remark-rehype": "11.1.1",
+    "rehype-stringify": "10.0.1",
+    "rehype-slug": "6.0.0",
+    "rehype-autolink-headings": "7.1.0",
+    "unist-util-visit": "5.0.0",
+    "minisearch": "7.1.0"
+  },
+  "devDependencies": {
+    "typescript": "5.7.2",
+    "@types/node": "22.10.0",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "tailwindcss": "4.1.0",
+    "@tailwindcss/postcss": "4.1.0",
+    "postcss": "8.4.49",
+    "tsx": "4.19.2",
+    "vitest": "2.1.8",
+    "@vitest/ui": "2.1.8",
+    "@testing-library/react": "16.1.0",
+    "@testing-library/jest-dom": "6.6.3",
+    "jsdom": "25.0.1",
+    "@playwright/test": "1.49.1",
+    "eslint": "9.17.0",
+    "eslint-config-next": "15.1.0"
+  }
+}
