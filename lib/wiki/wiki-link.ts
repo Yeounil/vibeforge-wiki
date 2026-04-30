@@ -1,4 +1,4 @@
-import { visit } from "unist-util-visit";
+import { visit, SKIP } from "unist-util-visit";
 import type { Plugin } from "unified";
 import type { Root, Text, Link } from "mdast";
 
@@ -54,7 +54,7 @@ export const remarkWikiLink: Plugin<[], Root> = () => {
       }
 
       parent.children.splice(index, 1, ...newChildren);
-      return [visit.SKIP, index + newChildren.length];
+      return [SKIP, index + newChildren.length];
     });
   };
 };
