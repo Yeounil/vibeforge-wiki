@@ -28,14 +28,18 @@ export function buildBacklinks(pages: Page[]): BacklinkBuildResult {
   const broken: { from: string; target: string }[] = [];
 
   for (const p of pages) {
-    const seen = new Set<string>(); // dedupe per source page
+    const seen = new Set<string>(); // dedupe per source page (both resolved + broken)
     for (const match of p.body.matchAll(WIKI_LINK_RE)) {
       const target = match[1].trim();
       const resolved = aliasMap.get(target.toLowerCase());
       if (!resolved) {
+        const bKey = `broken:${target}`;
+        if (seen.has(bKey)) continue;
+        seen.add(bKey);
         broken.push({ from: p.slug, target });
         continue;
       }
+      if (resolved === p.slug) continue; // ignore self-links
       const key = `${p.slug}->${resolved}`;
       if (seen.has(key)) continue;
       seen.add(key);

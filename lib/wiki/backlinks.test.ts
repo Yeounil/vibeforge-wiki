@@ -58,4 +58,30 @@ describe("buildBacklinks", () => {
     const { broken } = buildBacklinks(withBroken);
     expect(broken).toContainEqual({ from: "d", target: "nowhere" });
   });
+
+  it("does not record self-links as backlinks", () => {
+    const selfRef: Page[] = [
+      {
+        slug: "x",
+        filePath: "data/x.md",
+        frontmatter: { title: "X", tags: [], aliases: [], video: null, updated: "2026-04-30" },
+        body: "talks about [[x]] itself",
+      },
+    ];
+    const { backlinks } = buildBacklinks(selfRef);
+    expect(backlinks["x"]).toBeUndefined();
+  });
+
+  it("dedupes a broken target referenced multiple times in the same page", () => {
+    const dupBroken: Page[] = [
+      {
+        slug: "y",
+        filePath: "data/y.md",
+        frontmatter: { title: "Y", tags: [], aliases: [], video: null, updated: "2026-04-30" },
+        body: "see [[ghost]] and again [[ghost]]",
+      },
+    ];
+    const { broken } = buildBacklinks(dupBroken);
+    expect(broken.filter((b) => b.from === "y" && b.target === "ghost")).toHaveLength(1);
+  });
 });
