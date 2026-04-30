@@ -1,6 +1,7 @@
 // components/layout/SiteHeader.tsx
 import Link from "next/link";
 import type { Route } from "next";
+import { AuthButton } from "./AuthButton";
 
 interface Props {
   searchSlot?: React.ReactNode;
@@ -18,6 +19,9 @@ export function SiteHeader({ searchSlot }: Props) {
         <Link href={"/about" as Route} className="hover:text-[var(--text-primary)]">About</Link>
       </nav>
       {searchSlot && <div className="flex-1 max-w-md">{searchSlot}</div>}
+      <div className={searchSlot ? "" : "ml-auto"}>
+        <AuthButton />
+      </div>
     </header>
   );
 }
