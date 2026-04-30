@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npm run build:indexes",
     "dev": "next dev",
     "build": "npm run build:indexes && next build",
     "start": "next start",
