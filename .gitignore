@@ -1,9 +1,40 @@
+# Superpowers visual companion
 .superpowers/
+
+# IDE
+.claude/
+.idea/
+.vscode/
+
+# Node
 node_modules/
+.pnp
+.pnp.js
+npm-debug.log*
+
+# Next.js
 .next/
-.DS_Store
+out/
+next-env.d.ts
+
+# Vercel
+.vercel
+
+# Build outputs
+/public/wiki-data/
+
+# Test coverage
+/coverage
+/test-results
+/playwright-report
+
+# Env
 .env*
 !.env.example
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Archived legacy Quartz scaffold (Plan 1, Task 0.1)
 /archive/
