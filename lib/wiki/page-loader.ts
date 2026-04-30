@@ -4,6 +4,7 @@ import { buildBacklinks, buildAliasMap } from "./backlinks";
 import { renderBody } from "./render";
 import type { Page } from "./types";
 
+// Vault root — the git submodule mount. loadVault walks `<root>/data/**/*.md`.
 const CONTENT_DIR = path.resolve(process.cwd(), "content");
 
 interface LoadedPageBundle {

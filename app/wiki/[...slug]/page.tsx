@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { loadOnePage, getAllSlugs } from "@/lib/wiki/page-loader";
 import { WikiPage } from "@/components/wiki/WikiPage";
 
+// e.g., "https://github.com/Yeounil/vibeforge-wiki"
 const EDIT_BASE_URL = process.env.NEXT_PUBLIC_WIKI_REPO_URL ?? null;
 
 export const dynamicParams = true;
