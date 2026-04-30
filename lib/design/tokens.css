@@ -1,0 +1,40 @@
+/* lib/design/tokens.css — VibeForge design tokens (Plan 2). */
+
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/Pretendard-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/Pretendard-SemiBold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/Pretendard-Bold.woff2") format("woff2");
+}
+
+:root {
+  --bg-gradient: linear-gradient(135deg, #f3e7fb 0%, #fde7f3 100%);
+  --surface-card: #ffffff;
+  --surface-shadow: 0 4px 24px rgba(124, 58, 237, 0.08);
+  --accent-from: #7c3aed;
+  --accent-to: #3b82f6;
+  --accent-cta: linear-gradient(135deg, #7c3aed, #3b82f6);
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --radius-card: 14px;
+
+  --cat-data-handling: #7c3aed;
+  --cat-how-computers-work: #14b8a6;
+  --cat-code-flow: #22c55e;
+  --cat-default: #f97316;
+}
