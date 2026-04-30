@@ -38,3 +38,6 @@ Thumbs.db
 
 # Archived legacy Quartz scaffold (Plan 1, Task 0.1)
 /archive/
+
+# TypeScript incremental build info
+tsconfig.tsbuildinfo
