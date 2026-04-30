@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Route } from "next";
 import { loadVault } from "@/lib/wiki/load";
+import { SearchBox } from "@/components/wiki/SearchBox";
 import path from "node:path";
 
 interface CategoryGroup {
@@ -33,6 +34,7 @@ export default async function WikiIndexPage() {
   return (
     <main className="max-w-3xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Wiki</h1>
+      <SearchBox />
       <p className="mb-4 text-gray-600">
         바이브코더가 알아두면 좋은 CS 지식. 카테고리별로 정리되어 있어요.
       </p>
