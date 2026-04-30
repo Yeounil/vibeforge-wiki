@@ -11,7 +11,6 @@ export interface Page {
   filePath: string;         // e.g. "data/data-handling/what-is-an-index.md"
   frontmatter: PageFrontmatter;
   body: string;             // raw markdown body (no frontmatter)
-  bodyHtml?: string;        // populated by render.ts
 }
 
 export interface BacklinkMap {
