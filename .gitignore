@@ -4,3 +4,6 @@ node_modules/
 .DS_Store
 .env*
 !.env.example
+
+# Archived legacy Quartz scaffold (Plan 1, Task 0.1)
+/archive/
