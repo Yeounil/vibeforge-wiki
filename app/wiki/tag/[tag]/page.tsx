@@ -1,9 +1,14 @@
+// app/wiki/tag/[tag]/page.tsx
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Route } from "next";
 import type { TagMap } from "@/lib/wiki/types";
+import { getAllPages } from "@/lib/wiki/page-loader";
+import { AppShell } from "@/components/layout/AppShell";
+import { Sidebar } from "@/components/layout/Sidebar";
+import { SearchBox } from "@/components/wiki/SearchBox";
 
 interface ManifestEntry {
   slug: string;
@@ -23,6 +28,8 @@ async function loadIndexes() {
   return { tags, titleBySlug };
 }
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const { tags } = await loadIndexes();
   return Object.keys(tags).map((tag) => ({ tag: encodeURIComponent(tag) }));
@@ -39,22 +46,40 @@ export default async function TagPage({
   const slugs = tags[tag];
   if (!slugs || slugs.length === 0) notFound();
 
+  const all = await getAllPages();
+  const sidebarPages = all.map((p) => ({
+    slug: p.slug,
+    title: p.frontmatter.title,
+    category: p.slug.split("/")[0],
+  }));
+
   return (
-    <main className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-2">#{tag}</h1>
-      <p className="text-sm text-gray-500 mb-4">{slugs.length}개 페이지</p>
-      <ul className="list-disc pl-6">
-        {slugs.map((s) => (
-          <li key={s}>
-            <Link href={`/wiki/${s}` as Route} className="underline">
-              {titleBySlug[s] ?? s}
+    <AppShell
+      headerSearch={<SearchBox />}
+      sidebar={<Sidebar pages={sidebarPages} currentSlug={null} />}
+      main={
+        <div className="vf-card p-6">
+          <h1 className="text-2xl font-bold mb-1">#{tag}</h1>
+          <p className="text-sm text-[var(--text-secondary)] mb-4">{slugs.length}개 페이지</p>
+          <ul className="space-y-2">
+            {slugs.map((s) => (
+              <li key={s}>
+                <Link
+                  href={`/wiki/${s}` as Route}
+                  className="block px-3 py-2 rounded-md hover:bg-black/5 text-[var(--text-primary)]"
+                >
+                  {titleBySlug[s] ?? s}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 text-sm">
+            <Link href="/wiki" className="underline hover:text-[var(--text-primary)]">
+              ← Wiki 홈
             </Link>
-          </li>
-        ))}
-      </ul>
-      <p className="mt-6 text-sm">
-        <Link href="/wiki" className="underline">← Wiki 홈</Link>
-      </p>
-    </main>
+          </p>
+        </div>
+      }
+    />
   );
 }
