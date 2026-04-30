@@ -19,7 +19,7 @@ const rehypeResolveWikiLinks: Plugin<[ResolveOptions], HastRoot> = (options) => 
   return (tree) => {
     visit(tree, "element", (node: Element) => {
       if (node.tagName !== "a") return;
-      const target = node.properties?.["data-wiki-target"] ?? node.properties?.["dataWikiTarget"];
+      const target = node.properties?.["data-wiki-target"];
       if (typeof target !== "string") return;
       const resolved = aliasMap.get(target.toLowerCase());
       if (resolved) {
