@@ -18,12 +18,14 @@ function process(md: string): string {
 describe("remarkWikiLink", () => {
   it("rewrites [[Target]] into a placeholder anchor with data attribute", () => {
     const html = process("see [[hello-world]] for details");
+    expect(html).toContain('href="#wiki-pending:hello-world"');
     expect(html).toContain('data-wiki-target="hello-world"');
     expect(html).toContain(">hello-world<");
   });
 
   it("supports [[Target|Display Text]] form", () => {
     const html = process("see [[hello-world|the intro]]");
+    expect(html).toContain('href="#wiki-pending:hello-world"');
     expect(html).toContain('data-wiki-target="hello-world"');
     expect(html).toContain(">the intro<");
   });
