@@ -44,3 +44,8 @@ export async function getAllSlugs(): Promise<string[]> {
   const { all } = await ensureCache();
   return all.map((p) => p.slug);
 }
+
+export async function getAllPages(): Promise<Page[]> {
+  const { all } = await ensureCache();
+  return all;
+}
