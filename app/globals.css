@@ -1,3 +1,15 @@
 @import "tailwindcss";
 
 /* Plan 1: bare functional only. Visual polish in Plan 2 (frontend-design skill). */
+
+/* Broken wiki-link styling (Plan 1, Task 1.11) */
+a[data-broken="true"] {
+  color: #999;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+a[data-broken="true"]::after {
+  content: " (broken)";
+  font-size: 0.85em;
+  opacity: 0.6;
+}
