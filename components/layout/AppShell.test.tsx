@@ -12,7 +12,8 @@ describe("AppShell", () => {
         right={<div>RIGHT</div>}
       />
     );
-    expect(screen.getByText("SIDE")).toBeInTheDocument();
+    // sidebar appears in both the mobile drawer and the desktop aside
+    expect(screen.getAllByText("SIDE").length).toBeGreaterThan(0);
     expect(screen.getByText("MAIN")).toBeInTheDocument();
     expect(screen.getByText("RIGHT")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "VibeForge" })).toBeInTheDocument();
