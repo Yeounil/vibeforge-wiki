@@ -1,12 +1,10 @@
-import { Backlinks } from "./Backlinks";
+// components/wiki/WikiPage.tsx
 import type { PageFrontmatter } from "@/lib/wiki/types";
 
 interface Props {
   slug: string;
   frontmatter: PageFrontmatter;
   bodyHtml: string;
-  backlinks: string[];
-  titleMap: Record<string, string>;
   /** GitHub URL prefix for "Edit on GitHub" — pass null to hide */
   editBaseUrl: string | null;
   /** filePath relative to wiki repo root, e.g. "data/cat-a/page.md" */
@@ -17,35 +15,36 @@ export function WikiPage({
   slug,
   frontmatter,
   bodyHtml,
-  backlinks,
-  titleMap,
   editBaseUrl,
   filePath,
 }: Props) {
   return (
-    <article className="prose max-w-3xl mx-auto p-6">
+    <article className="vf-card p-6 md:p-8">
       <header className="mb-6">
         <h1 className="text-3xl font-bold">{frontmatter.title}</h1>
-        <div className="text-sm text-gray-500 mt-1">
-          updated {frontmatter.updated} ·{" "}
+        <div className="text-sm text-[var(--text-secondary)] mt-1">
+          updated {frontmatter.updated}
           {frontmatter.tags.length > 0 && (
-            <span>
-              tags:{" "}
+            <>
+              {" · tags: "}
               {frontmatter.tags.map((t, i) => (
                 <span key={t}>
-                  <a href={`/wiki/tag/${encodeURIComponent(t)}`} className="underline">
+                  <a
+                    href={`/wiki/tag/${encodeURIComponent(t)}`}
+                    className="underline hover:text-[var(--text-primary)]"
+                  >
                     {t}
                   </a>
                   {i < frontmatter.tags.length - 1 ? ", " : ""}
                 </span>
               ))}
-            </span>
+            </>
           )}
         </div>
       </header>
 
       {frontmatter.video && (
-        <div className="mb-6 aspect-video">
+        <div className="mb-6 aspect-video rounded-lg overflow-hidden">
           <iframe
             src={frontmatter.video}
             title="Video"
@@ -55,9 +54,7 @@ export function WikiPage({
         </div>
       )}
 
-      <div dangerouslySetInnerHTML={{ __html: bodyHtml }} />
-
-      <Backlinks slugs={backlinks} titleMap={titleMap} />
+      <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: bodyHtml }} />
 
       {editBaseUrl && (
         <p className="mt-8 text-sm">
@@ -72,7 +69,7 @@ export function WikiPage({
         </p>
       )}
 
-      <p className="mt-2 text-xs text-gray-400">slug: {slug}</p>
+      <p className="mt-2 text-xs text-[var(--text-secondary)] opacity-60">slug: {slug}</p>
     </article>
   );
 }

@@ -1,8 +1,13 @@
 import { notFound } from "next/navigation";
-import { loadOnePage, getAllSlugs } from "@/lib/wiki/page-loader";
+import { loadOnePage, getAllSlugs, getAllPages } from "@/lib/wiki/page-loader";
 import { WikiPage } from "@/components/wiki/WikiPage";
+import { AppShell } from "@/components/layout/AppShell";
+import { Sidebar } from "@/components/layout/Sidebar";
+import { RightPanel } from "@/components/layout/RightPanel";
+import { TableOfContents } from "@/components/wiki/TableOfContents";
+import { Backlinks } from "@/components/wiki/Backlinks";
+import { SearchBox } from "@/components/wiki/SearchBox";
 
-// e.g., "https://github.com/Yeounil/vibeforge-wiki"
 const EDIT_BASE_URL = process.env.NEXT_PUBLIC_WIKI_REPO_URL ?? null;
 
 export const dynamicParams = true;
@@ -22,15 +27,32 @@ export default async function WikiSlugPage({
   const bundle = await loadOnePage(fullSlug);
   if (!bundle) notFound();
 
+  const all = await getAllPages();
+  const sidebarPages = all.map((p) => ({
+    slug: p.slug,
+    title: p.frontmatter.title,
+    category: p.slug.split("/")[0],
+  }));
+
   return (
-    <WikiPage
-      slug={fullSlug}
-      frontmatter={bundle.page.frontmatter}
-      bodyHtml={bundle.bodyHtml}
-      backlinks={bundle.backlinks}
-      titleMap={bundle.titleMap}
-      editBaseUrl={EDIT_BASE_URL}
-      filePath={bundle.page.filePath}
+    <AppShell
+      headerSearch={<SearchBox />}
+      sidebar={<Sidebar pages={sidebarPages} currentSlug={fullSlug} />}
+      main={
+        <WikiPage
+          slug={fullSlug}
+          frontmatter={bundle.page.frontmatter}
+          bodyHtml={bundle.bodyHtml}
+          editBaseUrl={EDIT_BASE_URL}
+          filePath={bundle.page.filePath}
+        />
+      }
+      right={
+        <RightPanel>
+          <TableOfContents bodyHtml={bundle.bodyHtml} />
+          <Backlinks slugs={bundle.backlinks} titleMap={bundle.titleMap} />
+        </RightPanel>
+      }
     />
   );
 }
