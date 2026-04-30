@@ -1,0 +1,25 @@
+export interface PageFrontmatter {
+  title: string;
+  tags: string[];
+  aliases: string[];
+  video: string | null;
+  updated: string; // ISO date
+}
+
+export interface Page {
+  slug: string;             // e.g. "data-handling/what-is-an-index"
+  filePath: string;         // e.g. "data/data-handling/what-is-an-index.md"
+  frontmatter: PageFrontmatter;
+  body: string;             // raw markdown body (no frontmatter)
+  bodyHtml?: string;        // populated by render.ts
+}
+
+export interface BacklinkMap {
+  // slug → list of slugs that link TO it
+  [slug: string]: string[];
+}
+
+export interface TagMap {
+  // tag → list of slugs
+  [tag: string]: string[];
+}
