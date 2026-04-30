@@ -31,7 +31,6 @@ next-env.d.ts
 # Env
 .env*
 !.env.example
-.env.local
 
 # OS
 .DS_Store

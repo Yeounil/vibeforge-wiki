@@ -41,7 +41,7 @@ Before Task 3.10 can be reached, the user must complete external setup. The Plan
    - At Task 3.10 the user opens Supabase Studio → SQL Editor and runs the contents of `supabase/migrations/0001_init.sql` then `supabase/migrations/0002_rls.sql`.
    - Verify tables exist via Database → Tables.
 
-5. **Populate `.env.local`** (copied from `.env.local.example`):
+5. **Populate `.env`** (copied from `.env.example`):
    ```
    NEXT_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>
@@ -49,14 +49,14 @@ Before Task 3.10 can be reached, the user must complete external setup. The Plan
    NEXT_PUBLIC_WIKI_REPO_URL=https://github.com/Yeounil/vibeforge-wiki   # already set in Plan 1
    ```
 
-If the user is not ready for the external setup at the time Plan 3 is dispatched, the controller MUST stop after Task 3.9 and report the checkpoint. Do not attempt Phases C–F without confirming `.env.local` is populated and migrations are applied.
+If the user is not ready for the external setup at the time Plan 3 is dispatched, the controller MUST stop after Task 3.9 and report the checkpoint. Do not attempt Phases C–F without confirming `.env` is populated and migrations are applied.
 
 ---
 
 ## File Structure
 
 **Create:**
-- `.env.local.example` — template for env vars (committed)
+- `.env.example` — template for env vars (committed)
 - `lib/env.ts` — runtime env validation (server vs browser separation)
 - `lib/supabase/server.ts` — server-side Supabase client factory (Server Components, Route Handlers, Server Actions)
 - `lib/supabase/browser.ts` — browser-side client factory
@@ -87,7 +87,7 @@ If the user is not ready for the external setup at the time Plan 3 is dispatched
 **Modify:**
 - `package.json` — add `@supabase/supabase-js`, `@supabase/ssr`, `zod`
 - `components/layout/SiteHeader.tsx` — wire AuthButton into the header (replaces auth-state placeholder)
-- `.gitignore` — append `.env.local`
+- `.gitignore` — append `.env`
 
 **No changes:** All Plan 1 / Plan 2 wiki code, layout primitives, design tokens.
 
@@ -245,11 +245,11 @@ git checkout -b plan3/supabase-forum plan2-visual-design-3col
 npm install @supabase/supabase-js@^2.45.0 @supabase/ssr@^0.5.0 zod@^3.23.0
 ```
 
-- [ ] **Step 3: Append `.env.local` to `.gitignore`**
+- [ ] **Step 3: Append `.env` to `.gitignore`**
 
 Read `D:/Education/.gitignore`. Append a single line if not already present:
 ```
-.env.local
+.env
 ```
 
 - [ ] **Step 4: Verify install**
@@ -271,11 +271,11 @@ git commit -m "chore(deps): add @supabase/ssr + supabase-js + zod for Plan 3 for
 ### Task 3.2: Env example + validation module
 
 **Files:**
-- Create: `.env.local.example`
+- Create: `.env.example`
 - Create: `lib/env.ts`
 - Create: `lib/env.test.ts`
 
-- [ ] **Step 1: Write `.env.local.example`**
+- [ ] **Step 1: Write `.env.example`**
 
 ```
 # Supabase — get from https://supabase.com/dashboard/project/<ref>/settings/api
@@ -369,7 +369,7 @@ export function getServerEnv(): ServerEnv {
 - [ ] **Step 6: Commit**
 
 ```bash
-git add .env.local.example lib/env.ts lib/env.test.ts
+git add .env.example lib/env.ts lib/env.test.ts
 git commit -m "feat(env): public + server env helpers with required-var validation"
 ```
 
@@ -484,7 +484,7 @@ export async function middleware(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !anon) {
-    // During Plan 3 development before .env.local is populated, just pass through.
+    // During Plan 3 development before .env is populated, just pass through.
     return response;
   }
 
@@ -751,7 +751,7 @@ git commit -m "feat(forum): Zod schemas for newPost and newComment input"
 
 This is a controller pause. No subagent. The implementer (or controller) must STOP and confirm with the user that:
 
-- [ ] **Step 1: User confirms `.env.local` exists at `D:/Education/.env.local`** with three keys populated:
+- [ ] **Step 1: User confirms `.env` exists at `D:/Education/.env`** with three keys populated:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `SUPABASE_SERVICE_ROLE_KEY`
@@ -770,7 +770,7 @@ Run a one-off node script (no commit needed):
 ```bash
 node -e "
 const { createClient } = require('@supabase/supabase-js');
-require('dotenv').config({ path: '.env.local' });
+require('dotenv').config({ path: '.env' });
 const c = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 c.from('posts').select('id', { count: 'exact', head: true }).then(r => console.log('posts count =', r.count, 'error=', r.error));
 "
@@ -2167,7 +2167,7 @@ git commit -m "feat(forum): comment form on post detail (auth-gated)"
 
 These tests do NOT require auth — they verify the forum routes render correctly when there is no user signed in and (likely) no posts. They run in CI via `webServer: npm run dev` defined in `playwright.config.ts` from Plan 1.
 
-**Important:** these tests assume `.env.local` is populated (Phase C onward). If running in CI without env vars, the dev server's middleware short-circuits to passthrough and the forum pages will throw at the Supabase client step. For Plan 3 these tests are run locally only — `playwright.config.ts` is not modified to require/skip them.
+**Important:** these tests assume `.env` is populated (Phase C onward). If running in CI without env vars, the dev server's middleware short-circuits to passthrough and the forum pages will throw at the Supabase client step. For Plan 3 these tests are run locally only — `playwright.config.ts` is not modified to require/skip them.
 
 - [ ] **Step 1: Write the spec**
 
@@ -2213,7 +2213,7 @@ test.describe("forum read-only", () => {
 
 - [ ] **Step 2: Run** `npx playwright test tests/e2e/forum-read.spec.ts` — expect 5 pass.
 
-If any test fails because `.env.local` is missing or migrations not applied, the controller MUST stop and direct the user to the USER CHECKPOINT (Task 3.10). Do NOT fudge the spec to make it pass.
+If any test fails because `.env` is missing or migrations not applied, the controller MUST stop and direct the user to the USER CHECKPOINT (Task 3.10). Do NOT fudge the spec to make it pass.
 
 - [ ] **Step 3: Commit**
 
@@ -2280,7 +2280,7 @@ Expected: ~24 commits since plan2 tag, tag `plan3-supabase-forum` present.
 
 **Type consistency:** `ForumCategory`, `Post`, `PostWithAuthor`, `CommentWithAuthor`, `Profile` defined in 3.8 and consistently used in 3.15, 3.17, 3.18, 3.21, 3.22. The `category` field name is consistent between SQL (3.6), types (3.8), Zod (3.9), action (3.19), routes. The `author_id` field is consistent.
 
-**Risk acknowledged:** Phase C onward depends on the user's external setup. The plan explicitly stops at Task 3.10 (USER CHECKPOINT). Without `.env.local`, the dev server runs but middleware short-circuits and any forum route throws at the Supabase client step. Tests assume the checkpoint passed.
+**Risk acknowledged:** Phase C onward depends on the user's external setup. The plan explicitly stops at Task 3.10 (USER CHECKPOINT). Without `.env`, the dev server runs but middleware short-circuits and any forum route throws at the Supabase client step. Tests assume the checkpoint passed.
 
 ---
 
