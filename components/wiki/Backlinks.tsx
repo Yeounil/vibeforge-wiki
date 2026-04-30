@@ -9,17 +9,22 @@ interface Props {
 export function Backlinks({ slugs, titleMap }: Props) {
   if (slugs.length === 0) return null;
   return (
-    <aside aria-label="Backlinks" className="mt-8 border-t pt-4">
-      <h2 className="text-sm font-semibold mb-2">이 페이지를 인용한 곳</h2>
-      <ul className="list-disc pl-6">
+    <nav aria-label="Backlinks" className="text-sm">
+      <h2 className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)] mb-2">
+        이 페이지를 인용한 곳
+      </h2>
+      <ul className="space-y-1">
         {slugs.map((slug) => (
           <li key={slug}>
-            <Link href={`/wiki/${slug}` as Route} className="underline">
+            <Link
+              href={`/wiki/${slug}` as Route}
+              className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+            >
               {titleMap[slug] ?? slug}
             </Link>
           </li>
         ))}
       </ul>
-    </aside>
+    </nav>
   );
 }
