@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getPost, listComments } from "@/lib/forum/queries";
@@ -5,6 +6,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { SearchBox } from "@/components/wiki/SearchBox";
 import { CategoryBadge } from "@/components/forum/CategoryBadge";
+import { CommentForm } from "@/components/forum/CommentForm";
 import { getAllPages } from "@/lib/wiki/page-loader";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
@@ -22,11 +24,13 @@ export default async function ForumPostPage({
 }) {
   const { id } = await params;
   const supabase = await createClient();
-  const [post, comments] = await Promise.all([
+  const [post, comments, userResult] = await Promise.all([
     getPost(supabase, id),
     listComments(supabase, id),
+    supabase.auth.getUser(),
   ]);
   if (!post) notFound();
+  const user = userResult.data.user;
 
   const all = await getAllPages();
   const sidebarPages = all.map((p) => ({
@@ -60,9 +64,9 @@ export default async function ForumPostPage({
               댓글 {comments.length}
             </h2>
             {comments.length === 0 ? (
-              <p className="text-sm text-[var(--text-secondary)]">첫 댓글을 남겨보세요.</p>
+              <p className="text-sm text-[var(--text-secondary)] mb-4">첫 댓글을 남겨보세요.</p>
             ) : (
-              <ul className="space-y-3">
+              <ul className="space-y-3 mb-4">
                 {comments.map((c) => {
                   const cAuthor = c.author?.display_name ?? c.author?.github_login ?? "익명";
                   return (
@@ -76,6 +80,13 @@ export default async function ForumPostPage({
                   );
                 })}
               </ul>
+            )}
+            {user ? (
+              <CommentForm postId={post.id} />
+            ) : (
+              <p className="text-sm text-[var(--text-secondary)]">
+                댓글을 달려면 <Link href="/forum" className="underline">로그인</Link>이 필요해요.
+              </p>
             )}
           </section>
         </div>
