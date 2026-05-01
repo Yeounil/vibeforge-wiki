@@ -30,3 +30,6 @@ a[data-broken="true"]::after {
   font-size: 0.85em;
   opacity: 0.6;
 }
+
+/* Tailwind 4 plugin registration — CSS-based */
+@plugin "@tailwindcss/typography";
