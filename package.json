@@ -8,6 +8,7 @@
     "build": "npm run build:indexes && next build",
     "start": "next start",
     "build:indexes": "tsx scripts/build-indexes.ts",
+    "check:content": "tsx scripts/check-content.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
