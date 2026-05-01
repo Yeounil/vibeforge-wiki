@@ -1,6 +1,6 @@
 import type { Page, BacklinkMap } from "./types";
 
-const WIKI_LINK_RE = /(?<!\[)\[\[([^\[\]|]+?)(?:\|[^\[\]]+?)?\]\](?!\])/g;
+export const WIKI_LINK_RE = /(?<!\[)\[\[([^\[\]|]+?)(?:\|[^\[\]]+?)?\]\](?!\])/g;
 
 export function buildAliasMap(pages: Page[]): Map<string, string> {
   const m = new Map<string, string>();
