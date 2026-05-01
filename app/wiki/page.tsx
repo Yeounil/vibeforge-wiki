@@ -36,11 +36,20 @@ export default async function WikiIndexPage() {
       sidebar={<Sidebar pages={sidebarPages} currentSlug={null} />}
       main={
         <div className="space-y-6">
-          <header className="vf-card p-6">
-            <h1 className="text-3xl font-bold">Wiki</h1>
-            <p className="mt-2 text-[var(--text-secondary)]">
-              바이브코더가 알아두면 좋은 CS 지식. 카테고리별로 정리되어 있어요.
-            </p>
+          <header className="vf-card p-6 flex items-start justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold">Wiki</h1>
+              <p className="mt-2 text-[var(--text-secondary)]">
+                바이브코더가 알아두면 좋은 CS 지식. 카테고리별로 정리되어 있어요.
+              </p>
+            </div>
+            <Link
+              href={"/wiki/graph" as Route}
+              className="shrink-0 self-center px-4 py-2 rounded-md text-sm font-semibold text-white"
+              style={{ background: "var(--accent-cta)" }}
+            >
+              그래프뷰 →
+            </Link>
           </header>
           {orderedKeys.map((cat) => {
             const meta = getCategoryMeta(cat);
