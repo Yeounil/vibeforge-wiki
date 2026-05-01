@@ -1,12 +1,16 @@
+// app/forum/post/[id]/page.tsx
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getPost, listComments } from "@/lib/forum/queries";
+import { listWikiRefsByPost } from "@/lib/wiki-qa/queries";
 import { AppShell } from "@/components/layout/AppShell";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { RightPanel } from "@/components/layout/RightPanel";
 import { SearchBox } from "@/components/wiki/SearchBox";
 import { CategoryBadge } from "@/components/forum/CategoryBadge";
 import { CommentForm } from "@/components/forum/CommentForm";
+import { RelatedWiki } from "@/components/forum/RelatedWiki";
 import { getAllPages } from "@/lib/wiki/page-loader";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
@@ -38,6 +42,17 @@ export default async function ForumPostPage({
     title: p.frontmatter.title,
     category: p.slug.split("/")[0],
   }));
+  const titleMap: Record<string, string> = Object.fromEntries(
+    all.map((p) => [p.slug, p.frontmatter.title])
+  );
+
+  // Related wiki refs — best-effort.
+  let wikiSlugs: string[] = [];
+  try {
+    wikiSlugs = await listWikiRefsByPost(supabase, post.id);
+  } catch (e) {
+    console.error("[RelatedWiki load failed]", e);
+  }
 
   const authorName =
     post.author?.display_name ?? post.author?.github_login ?? "익명";
@@ -46,6 +61,13 @@ export default async function ForumPostPage({
     <AppShell
       headerSearch={<SearchBox />}
       sidebar={<Sidebar pages={sidebarPages} currentSlug={null} />}
+      right={
+        wikiSlugs.length > 0 ? (
+          <RightPanel>
+            <RelatedWiki slugs={wikiSlugs} titleMap={titleMap} />
+          </RightPanel>
+        ) : undefined
+      }
       main={
         <div className="space-y-4">
           <article className="vf-card p-6 md:p-8">
