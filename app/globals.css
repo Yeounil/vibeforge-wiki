@@ -33,3 +33,58 @@ a[data-broken="true"]::after {
 
 /* Tailwind 4 plugin registration — CSS-based */
 @plugin "@tailwindcss/typography";
+
+/* Wiki body typography — bridges typography plugin defaults to site palette.
+   Tokens defined in lib/design/tokens.css. */
+.prose {
+  --tw-prose-body: var(--text-primary);
+  --tw-prose-headings: var(--text-primary);
+  --tw-prose-links: var(--accent-from);
+  --tw-prose-bold: var(--text-primary);
+  --tw-prose-code: var(--text-primary);
+  --tw-prose-quotes: var(--text-secondary);
+}
+
+/* Tables — rounded corners with subtle accent header */
+.prose table {
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.prose thead { background: rgba(124, 58, 237, 0.06); }
+.prose th,
+.prose td {
+  padding: 0.5em 0.75em;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Inline + fenced code — light gray boxes, no syntax highlighting */
+.prose code {
+  background: rgba(0, 0, 0, 0.04);
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+}
+.prose pre {
+  background: rgba(0, 0, 0, 0.04);
+  padding: 1em;
+  border-radius: 8px;
+}
+.prose pre code {
+  background: transparent;
+  padding: 0;
+}
+
+/* Wiki-links — distinct from prose default link color via dotted underline +
+   accent color + soft hover background. data-wiki-target is set by
+   lib/wiki/render.ts rehypeResolveWikiLinks plugin. Existing
+   a[data-broken="true"] rule above gives the third (broken) state. */
+.prose a[data-wiki-target] {
+  color: var(--accent-from);
+  text-decoration: underline dotted;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1.5px;
+}
+.prose a[data-wiki-target]:hover {
+  background: rgba(124, 58, 237, 0.08);
+  border-radius: 3px;
+}
