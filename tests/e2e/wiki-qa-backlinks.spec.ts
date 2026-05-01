@@ -52,6 +52,8 @@ test.beforeAll(async () => {
 });
 
 test.afterAll(async () => {
+  // beforeAll may have skipped before initializing admin (missing env).
+  if (!admin) return;
   if (postId) await admin.from("posts").delete().eq("id", postId);
   if (userId) await admin.auth.admin.deleteUser(userId);
 });
