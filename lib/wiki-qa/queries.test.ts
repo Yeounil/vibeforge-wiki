@@ -80,4 +80,13 @@ describe("wiki-qa queries", () => {
     );
     expect(r).toEqual([]);
   });
+
+  it("listWikiRefsByPost throws on error", async () => {
+    await expect(
+      listWikiRefsByPost(
+        client({ data: null, error: { message: "db error" } }),
+        "post-1"
+      )
+    ).rejects.toEqual({ message: "db error" });
+  });
 });

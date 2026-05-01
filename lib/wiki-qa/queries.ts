@@ -26,7 +26,7 @@ export async function listPostsByWikiSlug(
     .from("qa_wiki_refs")
     .select(POST_EMBED)
     .eq("wiki_slug", slug)
-    .order("created_at", { foreignTable: "posts", ascending: false })
+    .order("created_at", { referencedTable: "posts", ascending: false })
     .limit(limit);
   if (error) throw error;
   if (!data) return [];
