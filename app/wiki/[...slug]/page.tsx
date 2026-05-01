@@ -8,6 +8,7 @@ import { RightPanel } from "@/components/layout/RightPanel";
 import { TableOfContents } from "@/components/wiki/TableOfContents";
 import { Backlinks } from "@/components/wiki/Backlinks";
 import { RelatedQA } from "@/components/wiki/RelatedQA";
+import { GiscusEmbed } from "@/components/wiki/GiscusEmbed";
 import { SearchBox } from "@/components/wiki/SearchBox";
 import { createClient } from "@/lib/supabase/server";
 import { listPostsByWikiSlug } from "@/lib/wiki-qa/queries";
@@ -53,13 +54,16 @@ export default async function WikiSlugPage({
       headerSearch={<SearchBox />}
       sidebar={<Sidebar pages={sidebarPages} currentSlug={fullSlug} />}
       main={
-        <WikiPage
-          slug={fullSlug}
-          frontmatter={bundle.page.frontmatter}
-          bodyHtml={bundle.bodyHtml}
-          editBaseUrl={EDIT_BASE_URL}
-          filePath={bundle.page.filePath}
-        />
+        <>
+          <WikiPage
+            slug={fullSlug}
+            frontmatter={bundle.page.frontmatter}
+            bodyHtml={bundle.bodyHtml}
+            editBaseUrl={EDIT_BASE_URL}
+            filePath={bundle.page.filePath}
+          />
+          <GiscusEmbed pathname={`/wiki/${fullSlug}`} />
+        </>
       }
       right={
         <RightPanel>
