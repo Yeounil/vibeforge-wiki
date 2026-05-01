@@ -54,3 +54,8 @@ export async function getAliasMap(): Promise<Map<string, string>> {
   const { aliasMap } = await ensureCache();
   return aliasMap;
 }
+
+export async function getBacklinkMap() {
+  const { backlinks } = await ensureCache();
+  return backlinks;
+}
