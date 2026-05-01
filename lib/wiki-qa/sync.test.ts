@@ -23,8 +23,7 @@ function makeAdmin() {
   const fromImpl = (table: string) => {
     return {
       delete() {
-        const filter: Recorded["filter"] = undefined;
-        const rec: Recorded = { table, op: "delete", filter };
+        const rec: Recorded = { table, op: "delete", filter: undefined };
         return {
           eq(col: string, val: unknown) {
             rec.filter = { col, val };
@@ -74,5 +73,32 @@ describe("syncWikiRefs", () => {
     const { admin } = makeAdmin();
     const slugs = await syncWikiRefs(admin, "post-3", "[[async]]");
     expect(slugs).toEqual(["code-flow/async"]);
+  });
+
+  it("throws when delete fails", async () => {
+    const errAdmin = {
+      from: () => ({
+        delete: () => ({
+          eq: () => Promise.resolve({ error: { message: "delete boom" } }),
+        }),
+      }),
+    } as unknown as Parameters<typeof syncWikiRefs>[0];
+    await expect(
+      syncWikiRefs(errAdmin, "post-x", "[[async]]")
+    ).rejects.toEqual({ message: "delete boom" });
+  });
+
+  it("throws when insert fails", async () => {
+    const errAdmin = {
+      from: () => ({
+        delete: () => ({
+          eq: () => Promise.resolve({ error: null }),
+        }),
+        insert: () => Promise.resolve({ error: { message: "insert boom" } }),
+      }),
+    } as unknown as Parameters<typeof syncWikiRefs>[0];
+    await expect(
+      syncWikiRefs(errAdmin, "post-y", "[[async]]")
+    ).rejects.toEqual({ message: "insert boom" });
   });
 });
