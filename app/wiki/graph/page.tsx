@@ -52,8 +52,8 @@ export default async function GraphPage() {
           ))}
         </div>
       </div>
-      <div className="flex-1 px-4 md:px-6 pb-6">
-        <div className="vf-card h-[calc(100vh-180px)] overflow-hidden">
+      <div className="flex-1 px-4 md:px-6 pb-6 flex flex-col min-h-0">
+        <div className="vf-card flex-1 min-h-0 overflow-hidden">
           <GraphView data={data} />
         </div>
       </div>
