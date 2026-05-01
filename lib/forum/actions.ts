@@ -1,4 +1,6 @@
-// lib/forum/actions.ts
+// lib/forum/actions.ts — Server Actions for forum writes. Auth/identity is
+// established by the server-side Supabase client reading the session cookie;
+// RLS enforces author_id = auth.uid().
 "use server";
 
 import { redirect } from "next/navigation";
