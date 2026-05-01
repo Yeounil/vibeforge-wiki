@@ -19,8 +19,15 @@ export const dynamicParams = true;
 export const revalidate = 60;
 
 export async function generateStaticParams() {
+  // URL-encode each segment so the static .html files are named with the
+  // same encoded path the runtime sees. Without this, slugs containing
+  // spaces or non-ASCII chars (e.g. "관계형 데이터 모델") generate fine but
+  // 404 at request time because next start can't match the decoded URL
+  // to the literal-char filesystem path. Same pattern as wiki/tag/[tag].
   const slugs = await getAllSlugs();
-  return slugs.map((slug) => ({ slug: slug.split("/") }));
+  return slugs.map((slug) => ({
+    slug: slug.split("/").map(encodeURIComponent),
+  }));
 }
 
 export default async function WikiSlugPage({
@@ -29,7 +36,9 @@ export default async function WikiSlugPage({
   params: Promise<{ slug: string[] }>;
 }) {
   const { slug } = await params;
-  const fullSlug = slug.join("/");
+  // params come URL-encoded from the matched static route; decode each
+  // segment to get back the canonical slug stored in the vault.
+  const fullSlug = slug.map(decodeURIComponent).join("/");
   const bundle = await loadOnePage(fullSlug);
   if (!bundle) notFound();
 
@@ -82,7 +91,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string[] }>;
 }) {
   const { slug } = await params;
-  const bundle = await loadOnePage(slug.join("/"));
+  const bundle = await loadOnePage(slug.map(decodeURIComponent).join("/"));
   if (!bundle) return { title: "Not Found" };
   return { title: `${bundle.page.frontmatter.title} — VibeForge` };
 }
