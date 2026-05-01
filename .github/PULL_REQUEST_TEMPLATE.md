@@ -8,4 +8,5 @@
 - [ ] frontmatter 5개 필드 (`title`, `tags`, `aliases`, `video?`, `updated`) 채웠어요
 - [ ] [style-guide.md](../style-guide.md) 톤 따랐어요
 - [ ] 다른 페이지 인용 시 `[[wiki-link]]` 사용했어요
+- [ ] vibeforge-site에서 `npm run check:content` 통과했어요 (있으면 빠른 review)
 - [ ] 로컬에서 vibeforge-site `npm run dev`로 깨진 링크 없는지 확인했어요 (선택)

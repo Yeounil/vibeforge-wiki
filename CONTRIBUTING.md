@@ -14,7 +14,7 @@ title: 페이지 제목 (한국어)
 tags: [태그1, 태그2]
 aliases: [별칭1]      # [[wiki-link]] 매칭에 사용 (옵션)
 video: https://...     # YouTube URL (옵션)
-updated: 2026-04-30
+updated: 2026-05-01
 ---
 ```
 
@@ -41,3 +41,44 @@ updated: 2026-04-30
 3. 페이지 작성 (frontmatter + 본문)
 4. PR — `.github/PULL_REQUEST_TEMPLATE.md` 채우기
 5. 본인이 review·merge
+
+## 처음 기여자 가이드
+
+GitHub에서 처음 PR 보낸다면:
+
+1. 이 repo 우측 상단 **Fork** 버튼 → 본인 계정으로 복사
+2. 로컬 clone:
+   ```bash
+   git clone https://github.com/<당신>/vibeforge-wiki.git
+   cd vibeforge-wiki
+   ```
+3. branch 생성:
+   ```bash
+   git checkout -b add/<페이지-슬러그>
+   ```
+4. 페이지 작성 → commit → push → GitHub에서 **Pull request** 버튼 → review 요청
+5. 한 PR = 한 페이지 (review 단순화). 여러 페이지면 PR 여러 개로.
+
+## 추천 토픽
+
+뭐부터 쓸지 막막하면:
+
+- **깨진 `[[wiki-link]]`이 좋은 후보** — 누군가가 이미 인용하려 했다는 뜻이에요. site에서 빨간 strikethrough 링크를 찾아보세요.
+- **`data/data-handling/`의 미작성 자매 토픽**: 정규화, 격리수준, JOIN, 락, 인덱스 종류
+- **첫 PR이라면 200-400단어 1페이지부터** — 익숙해지면 길게.
+
+## 검증 (`npm run check:content`)
+
+PR 보내기 전에, [vibeforge-site](https://github.com/Yeounil/vibeforge-site) repo에서:
+
+```bash
+npm install   # 처음 한 번
+npm run check:content
+```
+
+frontmatter 필수 필드 + `[[wiki-link]]` 해상도를 자동 검사합니다.
+
+- error 0건이어야 merge 가능
+- warning(같은 link 6번 등)은 안내성, blocking 아님
+
+site repo가 vault 변경을 자동 반영하지 않는다면 `git submodule update --remote content` 후 재실행.
