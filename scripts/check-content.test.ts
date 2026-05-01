@@ -32,6 +32,25 @@ describe("runCheck", () => {
     expect(r.warnings.length).toBeGreaterThan(0);
     expect(r.warnings.some((w) => w.message.includes("target-alias"))).toBe(true);
   });
+
+  test("missing tags → exit 1, error mentions 'tags'", async () => {
+    const r = await runCheck(path.join(FIX, "missing-tags"));
+    expect(r.exitCode).toBe(1);
+    expect(r.errors.some((e) => /tags/i.test(e.message))).toBe(true);
+  });
+
+  test("bad updated format → exit 1, error mentions 'updated'", async () => {
+    const r = await runCheck(path.join(FIX, "bad-updated"));
+    expect(r.exitCode).toBe(1);
+    expect(r.errors.some((e) => /updated/i.test(e.message))).toBe(true);
+  });
+
+  test("non-existent vault → exit 2 (config error)", async () => {
+    const r = await runCheck(path.join(FIX, "does-not-exist"));
+    expect(r.exitCode).toBe(2);
+    expect(r.pagesChecked).toBe(0);
+    expect(r.errors.length).toBeGreaterThan(0);
+  });
 });
 
 describe("formatResult", () => {

@@ -49,9 +49,19 @@ interface ParsedPage {
 
 export async function runCheck(vaultDir: string): Promise<CheckResult> {
   const dataDir = path.join(vaultDir, "data");
-  let mdPaths: string[];
+  // walk() swallows readdir errors (so empty dirs return [] cleanly), so probe
+  // dataDir explicitly first — a missing vault must fail loudly (exit 2), not
+  // silently green-pass with "0 pages checked, all good ✓".
   try {
-    mdPaths = await walk(dataDir);
+    const s = await stat(dataDir);
+    if (!s.isDirectory()) {
+      return {
+        exitCode: 2,
+        errors: [{ file: dataDir, message: `vault data path is not a directory` }],
+        warnings: [],
+        pagesChecked: 0,
+      };
+    }
   } catch (e) {
     return {
       exitCode: 2,
@@ -60,6 +70,7 @@ export async function runCheck(vaultDir: string): Promise<CheckResult> {
       pagesChecked: 0,
     };
   }
+  const mdPaths = await walk(dataDir);
 
   const errors: CheckIssue[] = [];
   const warnings: CheckIssue[] = [];
