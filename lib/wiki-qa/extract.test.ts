@@ -27,12 +27,11 @@ describe("extractWikiRefs", () => {
     expect(extractWikiRefs(body, aliasMap)).toEqual(["code-flow/async"]);
   });
 
-  it("extracts [[Page Name]] wikilink", () => {
-    const body = "[[What Is An Index]]를 먼저 보세요.";
-    // The buildAliasMap pattern lowercases keys; "what is an index" isn't in
-    // our minimal map. Use the slug-leaf form instead.
-    const body2 = "[[what-is-an-index]] 보세요.";
-    expect(extractWikiRefs(body2, aliasMap)).toEqual([
+  it("extracts [[slug-form]] wikilink resolved via aliasMap leaf", () => {
+    // The minimal map does not include "what is an index" (title form) since
+    // buildAliasMap would need the full page list. Test with the slug leaf form.
+    const body = "[[what-is-an-index]] 보세요.";
+    expect(extractWikiRefs(body, aliasMap)).toEqual([
       "data-handling/what-is-an-index",
     ]);
   });
@@ -76,6 +75,13 @@ describe("extractWikiRefs", () => {
 
   it("handles markdown link target stripped of trailing punctuation", () => {
     const body = "see [foo](/wiki/code-flow/async).";
+    expect(extractWikiRefs(body, aliasMap)).toEqual(["code-flow/async"]);
+  });
+
+  it("false-positive: extracts refs inside code fences (v2 known limitation)", () => {
+    const body = "```\n/wiki/code-flow/async\n```";
+    // v1 regex does not parse markdown structure; it matches inside code blocks.
+    // This is a documented known limitation (see spec §day-1 한계). Fix in v2.
     expect(extractWikiRefs(body, aliasMap)).toEqual(["code-flow/async"]);
   });
 });

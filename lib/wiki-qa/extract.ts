@@ -10,7 +10,9 @@
 // markdown like ")." doesn't get sucked in.
 const WIKI_PATH_RE = /\B\/wiki\/([\w/-]+?)(?=[\s)\]"'>.,!?]|$)/g;
 
-// Matches lib/wiki/backlinks.ts:WIKI_LINK_RE and lib/wiki/wiki-link.ts:WIKI_LINK_RE.
+// Matches lib/wiki/backlinks.ts:WIKI_LINK_RE exactly (display group non-capturing
+// since we only need the target). lib/wiki/wiki-link.ts uses the same pattern but
+// captures the display group as well — irrelevant here.
 const WIKI_LINK_RE = /(?<!\[)\[\[([^\[\]|]+?)(?:\|[^\[\]]+?)?\]\](?!\])/g;
 
 export function extractWikiRefs(
