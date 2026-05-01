@@ -49,3 +49,8 @@ export async function getAllPages(): Promise<Page[]> {
   const { all } = await ensureCache();
   return all;
 }
+
+export async function getAliasMap(): Promise<Map<string, string>> {
+  const { aliasMap } = await ensureCache();
+  return aliasMap;
+}
