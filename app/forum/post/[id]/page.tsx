@@ -28,15 +28,14 @@ export default async function ForumPostPage({
 }) {
   const { id } = await params;
   const supabase = await createClient();
-  const [post, comments, userResult] = await Promise.all([
+  const [post, comments, userResult, all] = await Promise.all([
     getPost(supabase, id),
     listComments(supabase, id),
     supabase.auth.getUser(),
+    getAllPages(),
   ]);
   if (!post) notFound();
   const user = userResult.data.user;
-
-  const all = await getAllPages();
   const sidebarPages = all.map((p) => ({
     slug: p.slug,
     title: p.frontmatter.title,
