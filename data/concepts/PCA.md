@@ -7,6 +7,7 @@ created: 2026-04-18
 updated: 2026-04-18
 source_count: 1
 aliases: [Principal Component Analysis, 주성분 분석]
+parent: 차원의 저주
 ---
 
 # PCA

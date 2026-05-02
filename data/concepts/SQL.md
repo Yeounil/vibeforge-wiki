@@ -7,6 +7,10 @@ created: 2026-04-18
 updated: 2026-04-18
 source_count: 2
 aliases: [Structured Query Language, SEQUEL]
+parent: 관계형 데이터 모델
+prerequisites:
+  - 관계 해석
+  - 관계 대수
 ---
 
 # SQL (Structured Query Language)

@@ -7,6 +7,10 @@ created: 2026-04-18
 updated: 2026-04-18
 source_count: 1
 aliases: [FP-Growth 알고리즘, FP-Tree]
+parent: 연관규칙마이닝
+prerequisites:
+  - Apriori
+  - 빈발 항목집합
 ---
 
 # FP-Growth

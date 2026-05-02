@@ -7,6 +7,7 @@ created: 2026-04-18
 updated: 2026-04-18
 source_count: 1
 aliases: [Database Management System, 데이터베이스 관리 시스템]
+parent: 데이터베이스
 ---
 
 # DBMS (Database Management System)

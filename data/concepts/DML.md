@@ -7,6 +7,9 @@ created: 2026-04-18
 updated: 2026-04-18
 source_count: 1
 aliases: [Data Manipulation Language, 데이터 조작어]
+parent: SQL
+prerequisites:
+  - 무결성 제약조건
 ---
 
 # DML (Data Manipulation Language)

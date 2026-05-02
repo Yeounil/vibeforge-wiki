@@ -7,6 +7,7 @@ created: 2026-04-18
 updated: 2026-04-18
 source_count: 1
 aliases: [Online Analytical Processing, 온라인 분석 처리]
+parent: 데이터마이닝
 ---
 
 # OLAP

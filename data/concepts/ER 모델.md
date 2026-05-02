@@ -7,6 +7,7 @@ created: 2026-04-18
 updated: 2026-04-18
 source_count: 1
 aliases: [Entity-Relationship Model, 개체-관계 모델, E-R Model]
+parent: 데이터 모델링
 ---
 
 # ER 모델 (Entity-Relationship Model)

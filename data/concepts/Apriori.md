@@ -7,6 +7,9 @@ created: 2026-04-18
 updated: 2026-04-18
 source_count: 1
 aliases: [Apriori 알고리즘, AprioriTid]
+parent: 연관규칙마이닝
+prerequisites:
+  - 빈발 항목집합
 ---
 
 # Apriori

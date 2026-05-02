@@ -82,3 +82,25 @@ frontmatter 필수 필드 + `[[wiki-link]]` 해상도를 자동 검사합니다.
 - warning(같은 link 6번 등)은 안내성, blocking 아님
 
 site repo가 vault 변경을 자동 반영하지 않는다면 `git submodule update --remote content` 후 재실행.
+
+## 부모와 선수지식
+
+페이지 frontmatter에 두 가지 관계를 표현할 수 있습니다.
+
+- **`parent:`** — 같은 폴더 안에서 "이 페이지는 어떤 큰 개념의 한 단원인가". 단일 값. 예: `parent: DBMS`
+- **`prerequisites:`** — "이 페이지를 이해하려면 먼저 알아야 하는 다른 페이지들". 배열. 다른 폴더의 페이지도 가능 (예: 도구·인물). 예:
+
+  ```yaml
+  prerequisites:
+    - 데이터 독립성
+    - 함수적 종속성
+  ```
+
+값은 wiki-link와 같은 규칙으로 적습니다 — 페이지의 `title` 또는 `aliases` 중 하나면 자동 해석됩니다.
+
+판단 기준:
+
+- "이게 X의 한 챕터/세부 주제다" → `parent: X`
+- "X를 모르면 이 글을 못 읽는다" → `prerequisites: [X, ...]`
+
+둘 다 해당하면 둘 다 적습니다. `parent`는 같은 top-level 폴더 안의 페이지여야 합니다 (cross-folder는 빌드 실패).

@@ -7,6 +7,7 @@ created: 2026-04-18
 updated: 2026-04-18
 source_count: 1
 aliases: [ERD, Entity-Relationship Diagram, 개체-관계 다이어그램]
+parent: ER 모델
 ---
 
 # ER 다이어그램 (ERD)
