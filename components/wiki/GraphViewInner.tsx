@@ -16,6 +16,8 @@ import { getCategoryMeta } from "@/lib/design/categories";
 import type { GraphData } from "@/lib/wiki/graph";
 import { clampNodeSize, computeDegrees } from "@/lib/wiki/graph-render";
 
+const layoutCooldownMs = (n: number) => Math.min(2500 + n * 5, 6000);
+
 const SIGMA_SETTINGS = {
   labelFont: "Pretendard, system-ui, sans-serif",
   labelColor: { color: "#6b7280" },
@@ -79,7 +81,7 @@ function LayoutDriver({ nodeCount }: { nodeCount: number }) {
   });
   useEffect(() => {
     start();
-    const cooldown = Math.min(2500 + nodeCount * 5, 6000);
+    const cooldown = layoutCooldownMs(nodeCount);
     const t = setTimeout(() => stop(), cooldown);
     return () => {
       clearTimeout(t);
@@ -92,7 +94,7 @@ function LayoutDriver({ nodeCount }: { nodeCount: number }) {
 function CameraFitter({ nodeCount }: { nodeCount: number }) {
   const { reset } = useCamera({ duration: 600, factor: 1.5 });
   useEffect(() => {
-    const cooldown = Math.min(2500 + nodeCount * 5, 6000);
+    const cooldown = layoutCooldownMs(nodeCount);
     const t = setTimeout(() => reset(), cooldown + 200);
     return () => clearTimeout(t);
   }, [reset, nodeCount]);
@@ -109,7 +111,7 @@ function InteractionLayer() {
     registerEvents({
       enterNode: (e: { node: string }) => setHoveredNode(e.node),
       leaveNode: () => setHoveredNode(null),
-      clickNode: (e: { node: string }) => router.push(`/wiki/${e.node}` as never),
+      clickNode: (e: { node: string }) => router.push(`/wiki/${e.node}`),
     });
   }, [registerEvents, router]);
 
