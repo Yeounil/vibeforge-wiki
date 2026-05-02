@@ -16,16 +16,16 @@ import { getCategoryMeta } from "@/lib/design/categories";
 import type { GraphData } from "@/lib/wiki/graph";
 import { clampNodeSize, computeDegrees } from "@/lib/wiki/graph-render";
 
-const layoutCooldownMs = (n: number) => Math.min(2500 + n * 5, 6000);
+const layoutCooldownMs = (n: number) => Math.min(4000 + n * 10, 8000);
 
 const SIGMA_SETTINGS = {
   labelFont: "Pretendard, system-ui, sans-serif",
-  labelColor: { color: "#6b7280" },
-  labelSize: 12,
+  labelColor: { color: "#374151" },
+  labelSize: 13,
   labelWeight: "500",
-  labelRenderedSizeThreshold: 8,
-  labelDensity: 0.07,
-  labelGridCellSize: 60,
+  labelRenderedSizeThreshold: 12,
+  labelDensity: 0.05,
+  labelGridCellSize: 150,
   defaultNodeColor: "#9ca3af",
   defaultEdgeColor: "rgba(0,0,0,0.08)",
   renderEdgeLabels: false,
