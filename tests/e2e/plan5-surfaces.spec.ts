@@ -29,7 +29,7 @@ test.describe("plan 5 surfaces (read-only)", () => {
       "giscus env not set",
     );
     // pick any seed wiki page that exists in the vault
-    await page.goto("/wiki/data-handling/what-is-an-index");
+    await page.goto("/wiki/concepts/Memex");
     const giscusFrame = page.locator("iframe.giscus-frame");
     await expect(giscusFrame).toBeVisible({ timeout: 10_000 });
   });

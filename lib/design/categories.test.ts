@@ -4,9 +4,9 @@ import { getCategoryMeta, listCategories } from "./categories";
 
 describe("categories", () => {
   it("returns label and color for known slug", () => {
-    const m = getCategoryMeta("data-handling");
-    expect(m.label).toBe("데이터 다루기");
-    expect(m.colorVar).toBe("--cat-data-handling");
+    const m = getCategoryMeta("concepts");
+    expect(m.label).toBe("Concepts");
+    expect(m.colorVar).toBe("--cat-concepts");
   });
 
   it("falls back to default color for unknown slug", () => {
@@ -22,9 +22,6 @@ describe("categories", () => {
       "entities",
       "people",
       "sources",
-      "data-handling",
-      "how-computers-work",
-      "code-flow",
     ]);
   });
 });

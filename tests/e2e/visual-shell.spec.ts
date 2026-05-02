@@ -9,11 +9,11 @@ test.describe("visual shell", () => {
   });
 
   test("wiki page renders sidebar with category dots and right panel TOC", async ({ page }) => {
-    await page.goto("/wiki/data-handling/what-is-an-index");
+    await page.goto("/wiki/concepts/Memex");
     const sidebar = page.getByTestId("appshell-sidebar");
     await expect(sidebar.getByRole("navigation", { name: "Categories" })).toBeVisible();
-    await expect(sidebar.getByText("데이터 다루기")).toBeVisible();
-    // Backlinks always present on this seed page (linked from index)
+    await expect(sidebar.getByText("Concepts")).toBeVisible();
+    // Backlinks always present on this seed page (linked from LLM Wiki Pattern)
     await expect(page.getByRole("navigation", { name: "Backlinks" })).toBeVisible();
   });
 

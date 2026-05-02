@@ -9,7 +9,7 @@ import { createClient } from "@supabase/supabase-js";
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-const SEED_SLUG = "data-handling/what-is-an-index";
+const SEED_SLUG = "concepts/Memex";
 
 let admin: ReturnType<typeof createClient>;
 let userId: string;
@@ -36,7 +36,7 @@ test.beforeAll(async () => {
     .insert({
       category: "qa",
       title: "PLAN4 FIXTURE: Wiki backlink smoke",
-      body_md: `Refers to /wiki/${SEED_SLUG} and [[what-is-an-index]].`,
+      body_md: `Refers to /wiki/${SEED_SLUG} and [[Memex]].`,
       author_id: userId,
       tags: [],
     })
@@ -72,10 +72,10 @@ test.describe("wiki ↔ Q&A backlinks", () => {
     await page.goto(`/forum/post/${postId}`);
     const right = page.getByTestId("appshell-right");
     await expect(right.getByText("이 글이 인용한 위키")).toBeVisible();
-    // The seed page's frontmatter title is "인덱스가 뭐예요?" — RelatedWiki
+    // The seed page's frontmatter title is "Memex" — RelatedWiki
     // renders titleMap[slug] which is that title.
     await expect(
-      right.getByRole("link", { name: "인덱스가 뭐예요?" })
+      right.getByRole("link", { name: "Memex" })
     ).toBeVisible();
   });
 });

@@ -5,23 +5,23 @@ import { Sidebar } from "./Sidebar";
 import type { VaultHierarchy } from "@/lib/wiki/hierarchy";
 
 const PAGES = [
-  { slug: "data-handling/what-is-an-index", title: "인덱스가 뭐예요?", category: "data-handling" },
-  { slug: "how-computers-work/what-is-a-process", title: "프로세스가 뭐예요?", category: "how-computers-work" },
-  { slug: "code-flow/what-is-an-array", title: "배열이 뭐예요?", category: "code-flow" },
+  { slug: "concepts/Memex", title: "Memex", category: "concepts" },
+  { slug: "people/Vannevar Bush", title: "Vannevar Bush", category: "people" },
+  { slug: "entities/Oracle", title: "Oracle", category: "entities" },
 ];
 
 describe("Sidebar", () => {
   it("renders category labels and child pages grouped", () => {
     render(<Sidebar pages={PAGES} tree={{}} currentSlug={null} />);
-    expect(screen.getByText("데이터 다루기")).toBeInTheDocument();
-    expect(screen.getByText("컴퓨터는 어떻게 일하나")).toBeInTheDocument();
-    expect(screen.getByText("코드 흐름")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "인덱스가 뭐예요?" })).toBeInTheDocument();
+    expect(screen.getByText("Concepts")).toBeInTheDocument();
+    expect(screen.getByText("People")).toBeInTheDocument();
+    expect(screen.getByText("Entities")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Memex" })).toBeInTheDocument();
   });
 
   it("marks the current page with aria-current=page", () => {
-    render(<Sidebar pages={PAGES} tree={{}} currentSlug="data-handling/what-is-an-index" />);
-    const link = screen.getByRole("link", { name: "인덱스가 뭐예요?" });
+    render(<Sidebar pages={PAGES} tree={{}} currentSlug="concepts/Memex" />);
+    const link = screen.getByRole("link", { name: "Memex" });
     expect(link).toHaveAttribute("aria-current", "page");
   });
 });
