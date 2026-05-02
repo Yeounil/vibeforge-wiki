@@ -109,18 +109,23 @@ export default async function WikiIndexPage() {
                 </ul>
 
                 {orphans.length > 0 && (
-                  <div className="mt-4 pt-4 border-t border-[var(--border-subtle,rgba(0,0,0,0.08))] text-sm text-[var(--text-secondary)]">
-                    {orphans.map((s, i) => (
-                      <span key={s}>
-                        <Link
-                          href={`/wiki/${s}` as Route}
-                          className="hover:text-[var(--text-primary)]"
-                        >
-                          {titleMap[s] ?? s}
-                        </Link>
-                        {i < orphans.length - 1 ? " · " : ""}
-                      </span>
-                    ))}
+                  <div className="mt-4 pt-4 border-t border-[var(--border-subtle,rgba(0,0,0,0.08))]">
+                    <p className="text-xs uppercase tracking-wide text-[var(--text-secondary)] mb-2">
+                      독립 항목
+                    </p>
+                    <div className="text-sm text-[var(--text-secondary)]">
+                      {orphans.map((s, i) => (
+                        <span key={s}>
+                          <Link
+                            href={`/wiki/${s}` as Route}
+                            className="hover:text-[var(--text-primary)]"
+                          >
+                            {titleMap[s] ?? s}
+                          </Link>
+                          {i < orphans.length - 1 ? " · " : ""}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
               </section>

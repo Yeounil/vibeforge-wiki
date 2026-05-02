@@ -87,6 +87,18 @@ describe("runCheck", () => {
     expect(r.exitCode).toBe(1);
     expect(r.errors.some((e) => /자기 자신/.test(e.message))).toBe(true);
   });
+
+  test("missing prereq → exit 1, error mentions 'GhostPrereq'", async () => {
+    const r = await runCheck(path.join(FIX, "missing-prereq"));
+    expect(r.exitCode).toBe(1);
+    expect(r.errors.some((e) => /GhostPrereq/.test(e.message))).toBe(true);
+  });
+
+  test("self prereq → exit 1, error mentions '자기 자신'", async () => {
+    const r = await runCheck(path.join(FIX, "self-prereq"));
+    expect(r.exitCode).toBe(1);
+    expect(r.errors.some((e) => /자기 자신/.test(e.message))).toBe(true);
+  });
 });
 
 describe("formatResult", () => {
