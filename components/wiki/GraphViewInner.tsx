@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   SigmaContainer,
   useLoadGraph,
   useRegisterEvents,
   useCamera,
+  useSigma,
 } from "@react-sigma/core";
 import "@react-sigma/core/lib/style.css";
 import { useWorkerLayoutForceAtlas2 } from "@react-sigma/layout-forceatlas2";
@@ -98,14 +99,40 @@ function CameraFitter({ nodeCount }: { nodeCount: number }) {
   return null;
 }
 
-function ClickHandler() {
+function InteractionLayer() {
   const router = useRouter();
+  const sigma = useSigma();
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+
   const registerEvents = useRegisterEvents();
   useEffect(() => {
     registerEvents({
+      enterNode: (e: { node: string }) => setHoveredNode(e.node),
+      leaveNode: () => setHoveredNode(null),
       clickNode: (e: { node: string }) => router.push(`/wiki/${e.node}` as never),
     });
   }, [registerEvents, router]);
+
+  useEffect(() => {
+    const graph = sigma.getGraph();
+    sigma.setSetting("nodeReducer", (node, attrs) => {
+      if (!hoveredNode) return attrs;
+      if (node === hoveredNode || graph.areNeighbors(hoveredNode, node)) {
+        return { ...attrs, zIndex: 1, forceLabel: true };
+      }
+      return { ...attrs, color: "rgba(150,150,150,0.25)", label: "", zIndex: 0 };
+    });
+    sigma.setSetting("edgeReducer", (edge, attrs) => {
+      if (!hoveredNode) return attrs;
+      const ext = graph.extremities(edge);
+      if (ext.includes(hoveredNode)) {
+        return { ...attrs, color: "#7c3aed", size: 1.2 };
+      }
+      return { ...attrs, hidden: true };
+    });
+    sigma.refresh();
+  }, [hoveredNode, sigma]);
+
   return null;
 }
 
@@ -118,7 +145,7 @@ export function GraphViewInner({ data }: { data: GraphData }) {
       <GraphLoader data={data} />
       <LayoutDriver nodeCount={data.nodes.length} />
       <CameraFitter nodeCount={data.nodes.length} />
-      <ClickHandler />
+      <InteractionLayer />
     </SigmaContainer>
   );
 }
