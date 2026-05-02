@@ -11,7 +11,8 @@ import { SearchBox } from "@/components/wiki/SearchBox";
 import { CategoryBadge } from "@/components/forum/CategoryBadge";
 import { CommentForm } from "@/components/forum/CommentForm";
 import { RelatedWiki } from "@/components/forum/RelatedWiki";
-import { getAllPages } from "@/lib/wiki/page-loader";
+import { getAllPages, getAliasMap } from "@/lib/wiki/page-loader";
+import { renderBody } from "@/lib/wiki/render";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -28,11 +29,12 @@ export default async function ForumPostPage({
 }) {
   const { id } = await params;
   const supabase = await createClient();
-  const [post, comments, userResult, all] = await Promise.all([
+  const [post, comments, userResult, all, aliasMap] = await Promise.all([
     getPost(supabase, id),
     listComments(supabase, id),
     supabase.auth.getUser(),
     getAllPages(),
+    getAliasMap(),
   ]);
   if (!post) notFound();
   const user = userResult.data.user;
@@ -44,6 +46,7 @@ export default async function ForumPostPage({
   const titleMap: Record<string, string> = Object.fromEntries(
     all.map((p) => [p.slug, p.frontmatter.title])
   );
+  const bodyHtml = await renderBody(post.body_md, aliasMap);
 
   // Related wiki refs — best-effort.
   let wikiSlugs: string[] = [];
@@ -78,7 +81,10 @@ export default async function ForumPostPage({
               </span>
             </div>
             <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
-            <div className="prose max-w-none whitespace-pre-wrap">{post.body_md}</div>
+            <div
+              className="prose max-w-none"
+              dangerouslySetInnerHTML={{ __html: bodyHtml }}
+            />
           </article>
           <section className="vf-card p-6">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--text-secondary)] mb-3">
