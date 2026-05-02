@@ -31,7 +31,7 @@ export function GraphView({ data }: Props) {
   }
 
   return (
-    <div className="w-full flex-1 min-h-0" data-testid="graph-canvas">
+    <div className="w-full flex-1 min-h-0 relative" data-testid="graph-canvas">
       <GraphViewInner data={data} />
     </div>
   );

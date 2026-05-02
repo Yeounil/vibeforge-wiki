@@ -141,7 +141,7 @@ function InteractionLayer() {
 export function GraphViewInner({ data }: { data: GraphData }) {
   return (
     <SigmaContainer
-      style={{ width: "100%", height: "100%" }}
+      style={{ position: "absolute", inset: 0 }}
       settings={SIGMA_SETTINGS}
     >
       <GraphLoader data={data} />
