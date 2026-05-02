@@ -15,9 +15,13 @@ describe("categories", () => {
     expect(m.colorVar).toBe("--cat-default");
   });
 
-  it("listCategories returns the three known categories in stable order", () => {
+  it("listCategories returns all known categories in stable order", () => {
     const list = listCategories();
     expect(list.map((c) => c.slug)).toEqual([
+      "concepts",
+      "entities",
+      "people",
+      "sources",
       "data-handling",
       "how-computers-work",
       "code-flow",

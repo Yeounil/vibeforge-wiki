@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Route } from "next";
-import { getAllPages } from "@/lib/wiki/page-loader";
+import { getAllPages, getHierarchy, getTitleMap } from "@/lib/wiki/page-loader";
 import { listCategories, getCategoryMeta } from "@/lib/design/categories";
 import { AppShell } from "@/components/layout/AppShell";
 import { Sidebar } from "@/components/layout/Sidebar";
@@ -12,28 +12,26 @@ export const metadata = {
 
 export default async function WikiIndexPage() {
   const all = await getAllPages();
+  const hierarchy = await getHierarchy();
+  const titleMap = await getTitleMap();
+
   const sidebarPages = all.map((p) => ({
     slug: p.slug,
     title: p.frontmatter.title,
     category: p.slug.split("/")[0],
   }));
 
-  const groups = new Map<string, { slug: string; title: string }[]>();
-  for (const p of all) {
-    const cat = p.slug.split("/")[0];
-    if (!groups.has(cat)) groups.set(cat, []);
-    groups.get(cat)!.push({ slug: p.slug, title: p.frontmatter.title });
-  }
-  const order = listCategories().map((c) => c.slug);
-  const orderedKeys = [
-    ...order.filter((c) => groups.has(c)),
-    ...Array.from(groups.keys()).filter((c) => !order.includes(c)),
+  const knownOrder = listCategories().map((c) => c.slug);
+  const allCats = Array.from(new Set(all.map((p) => p.slug.split("/")[0])));
+  const orderedCats = [
+    ...knownOrder.filter((c) => allCats.includes(c)),
+    ...allCats.filter((c) => !knownOrder.includes(c)).sort(),
   ];
 
   return (
     <AppShell
       headerSearch={<SearchBox />}
-      sidebar={<Sidebar pages={sidebarPages} currentSlug={null} />}
+      sidebar={<Sidebar pages={sidebarPages} tree={hierarchy} currentSlug={null} />}
       main={
         <div className="space-y-6">
           <header className="vf-card p-6 flex items-start justify-between gap-4">
@@ -51,11 +49,26 @@ export default async function WikiIndexPage() {
               그래프뷰 →
             </Link>
           </header>
-          {orderedKeys.map((cat) => {
+
+          {orderedCats.map((cat) => {
             const meta = getCategoryMeta(cat);
+            const folderTree = hierarchy[cat];
+            const pagesInCat = all.filter((p) => p.slug.split("/")[0] === cat);
+
+            const roots = folderTree?.roots ?? pagesInCat.map((p) => p.slug);
+            const orphans = roots.filter((slug) => {
+              const children = folderTree?.children[slug] ?? [];
+              const hasChildren = children.length > 0;
+              return !hasChildren;
+            });
+            const realRoots = roots.filter((slug) => {
+              const children = folderTree?.children[slug] ?? [];
+              return children.length > 0;
+            });
+
             return (
               <section key={cat} className="vf-card p-6">
-                <h2 className="flex items-center gap-2 text-xl font-semibold mb-3">
+                <h2 className="flex items-center gap-2 text-xl font-semibold mb-4">
                   <span
                     aria-hidden
                     className="inline-block w-2.5 h-2.5 rounded-full"
@@ -63,18 +76,53 @@ export default async function WikiIndexPage() {
                   />
                   {meta.label}
                 </h2>
-                <ul className="grid gap-2 sm:grid-cols-2">
-                  {groups.get(cat)!.map((p) => (
-                    <li key={p.slug}>
-                      <Link
-                        href={`/wiki/${p.slug}` as Route}
-                        className="block px-3 py-2 rounded-md hover:bg-black/5 text-[var(--text-primary)]"
-                      >
-                        {p.title}
-                      </Link>
-                    </li>
-                  ))}
+
+                <ul className="space-y-3">
+                  {realRoots.map((rootSlug) => {
+                    const children = folderTree?.children[rootSlug] ?? [];
+                    return (
+                      <li key={rootSlug}>
+                        <Link
+                          href={`/wiki/${rootSlug}` as Route}
+                          className="font-medium text-[var(--text-primary)] hover:underline"
+                        >
+                          {titleMap[rootSlug] ?? rootSlug}
+                        </Link>
+                        {children.length > 0 && (
+                          <div className="mt-1 text-sm text-[var(--text-secondary)] pl-3">
+                            {children.map((c, i) => (
+                              <span key={c}>
+                                <Link
+                                  href={`/wiki/${c}` as Route}
+                                  className="hover:text-[var(--text-primary)]"
+                                >
+                                  {titleMap[c] ?? c}
+                                </Link>
+                                {i < children.length - 1 ? " · " : ""}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
+
+                {orphans.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-[var(--border-subtle,rgba(0,0,0,0.08))] text-sm text-[var(--text-secondary)]">
+                    {orphans.map((s, i) => (
+                      <span key={s}>
+                        <Link
+                          href={`/wiki/${s}` as Route}
+                          className="hover:text-[var(--text-primary)]"
+                        >
+                          {titleMap[s] ?? s}
+                        </Link>
+                        {i < orphans.length - 1 ? " · " : ""}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </section>
             );
           })}
