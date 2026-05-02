@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import { buildAliasMap, WIKI_LINK_RE } from "../lib/wiki/backlinks";
 import { fileToSlug } from "../lib/wiki/slug";
 import type { Page } from "../lib/wiki/types";
+import { validateHierarchy } from "../lib/wiki/hierarchy";
 
 export interface CheckIssue {
   file: string;
@@ -45,6 +46,8 @@ interface ParsedPage {
   aliases: string[];
   updated: string;
   body: string;
+  parent: string | null;
+  prerequisites: string[];
 }
 
 export async function runCheck(vaultDir: string): Promise<CheckResult> {
@@ -124,6 +127,13 @@ export async function runCheck(vaultDir: string): Promise<CheckResult> {
       ? (data.aliases.filter((a) => typeof a === "string") as string[])
       : [];
 
+    const parent = typeof data.parent === "string" && data.parent.length > 0 ? data.parent : null;
+    const prerequisites = Array.isArray(data.prerequisites)
+      ? (data.prerequisites.filter(
+          (p) => typeof p === "string" && p.length > 0,
+        ) as string[])
+      : [];
+
     validPages.push({
       relPath,
       slug: fileToSlug(relPath),
@@ -132,6 +142,8 @@ export async function runCheck(vaultDir: string): Promise<CheckResult> {
       aliases,
       updated: updatedStr!,
       body: parsed.content,
+      parent,
+      prerequisites,
     });
   }
 
@@ -144,8 +156,8 @@ export async function runCheck(vaultDir: string): Promise<CheckResult> {
       aliases: p.aliases,
       video: null,
       updated: p.updated,
-      parent: null,
-      prerequisites: [],
+      parent: p.parent,
+      prerequisites: p.prerequisites,
     },
     body: p.body,
   }));
@@ -169,6 +181,14 @@ export async function runCheck(vaultDir: string): Promise<CheckResult> {
         });
       }
     }
+  }
+
+  const hierarchy = validateHierarchy(pageRecords, aliasMap);
+  for (const e of hierarchy.errors) {
+    errors.push({ file: e.page, message: `[hierarchy] ${e.detail}` });
+  }
+  for (const w of hierarchy.warnings) {
+    warnings.push({ file: w.page, message: `[hierarchy] ${w.detail}` });
   }
 
   return {

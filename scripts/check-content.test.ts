@@ -51,6 +51,42 @@ describe("runCheck", () => {
     expect(r.pagesChecked).toBe(0);
     expect(r.errors.length).toBeGreaterThan(0);
   });
+
+  test("valid hierarchy → exit 0", async () => {
+    const r = await runCheck(path.join(FIX, "valid-hierarchy"));
+    expect(r.exitCode).toBe(0);
+    expect(r.errors).toEqual([]);
+  });
+
+  test("cycle → exit 1, error mentions '사이클'", async () => {
+    const r = await runCheck(path.join(FIX, "cycle"));
+    expect(r.exitCode).toBe(1);
+    expect(r.errors.some((e) => /사이클/.test(e.message))).toBe(true);
+  });
+
+  test("cross-folder parent → exit 1, error mentions 'cross-folder'", async () => {
+    const r = await runCheck(path.join(FIX, "cross-folder-parent"));
+    expect(r.exitCode).toBe(1);
+    expect(r.errors.some((e) => /cross-folder/.test(e.message))).toBe(true);
+  });
+
+  test("missing parent → exit 1, error mentions 'Ghost'", async () => {
+    const r = await runCheck(path.join(FIX, "missing-parent"));
+    expect(r.exitCode).toBe(1);
+    expect(r.errors.some((e) => /Ghost/.test(e.message))).toBe(true);
+  });
+
+  test("cross-folder prereq → exit 0, warning emitted", async () => {
+    const r = await runCheck(path.join(FIX, "cross-folder-prereq"));
+    expect(r.exitCode).toBe(0);
+    expect(r.warnings.some((w) => /cross-folder/.test(w.message))).toBe(true);
+  });
+
+  test("self parent → exit 1, error mentions '자기 자신'", async () => {
+    const r = await runCheck(path.join(FIX, "self-parent"));
+    expect(r.exitCode).toBe(1);
+    expect(r.errors.some((e) => /자기 자신/.test(e.message))).toBe(true);
+  });
 });
 
 describe("formatResult", () => {
