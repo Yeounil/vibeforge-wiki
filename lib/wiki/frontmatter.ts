@@ -23,6 +23,10 @@ export function parseFrontmatter(raw: string): ParseResult {
   const tags = Array.isArray(data.tags) ? data.tags.map(String) : [];
   const aliases = Array.isArray(data.aliases) ? data.aliases.map(String) : [];
   const video = typeof data.video === "string" ? data.video : null;
+  const parent = typeof data.parent === "string" && data.parent.length > 0 ? data.parent : null;
+  const prerequisites = Array.isArray(data.prerequisites)
+    ? data.prerequisites.filter((p): p is string => typeof p === "string" && p.length > 0)
+    : [];
 
   return {
     frontmatter: {
@@ -31,6 +35,8 @@ export function parseFrontmatter(raw: string): ParseResult {
       aliases,
       video,
       updated: data.updated,
+      parent,
+      prerequisites,
     },
     body: content,
   };

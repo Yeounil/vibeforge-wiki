@@ -6,13 +6,13 @@ const pages: Page[] = [
   {
     slug: "a",
     filePath: "data/a.md",
-    frontmatter: { title: "인덱스란 무엇인가", tags: ["DB"], aliases: [], video: null, updated: "2026-04-30" },
+    frontmatter: { title: "인덱스란 무엇인가", tags: ["DB"], aliases: [], video: null, updated: "2026-04-30", parent: null, prerequisites: [] },
     body: "DB 인덱스는 책 색인과 같다",
   },
   {
     slug: "b",
     filePath: "data/b.md",
-    frontmatter: { title: "프로세스 기초", tags: ["OS"], aliases: [], video: null, updated: "2026-04-30" },
+    frontmatter: { title: "프로세스 기초", tags: ["OS"], aliases: [], video: null, updated: "2026-04-30", parent: null, prerequisites: [] },
     body: "프로세스는 실행 중인 프로그램이다",
   },
 ];

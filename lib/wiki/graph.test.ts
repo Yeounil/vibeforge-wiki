@@ -6,7 +6,7 @@ function page(slug: string, title: string): Page {
   return {
     slug,
     filePath: `data/${slug}.md`,
-    frontmatter: { title, tags: [], aliases: [], video: null, updated: "2026-05-01" },
+    frontmatter: { title, tags: [], aliases: [], video: null, updated: "2026-05-01", parent: null, prerequisites: [] },
     body: "",
   };
 }

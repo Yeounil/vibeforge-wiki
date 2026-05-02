@@ -6,19 +6,19 @@ const pages: Page[] = [
   {
     slug: "a",
     filePath: "data/a.md",
-    frontmatter: { title: "Apple", tags: [], aliases: [], video: null, updated: "2026-04-30" },
+    frontmatter: { title: "Apple", tags: [], aliases: [], video: null, updated: "2026-04-30", parent: null, prerequisites: [] },
     body: "links to [[b]] and [[Cat]] (alias for c)",
   },
   {
     slug: "b",
     filePath: "data/b.md",
-    frontmatter: { title: "Banana", tags: [], aliases: [], video: null, updated: "2026-04-30" },
+    frontmatter: { title: "Banana", tags: [], aliases: [], video: null, updated: "2026-04-30", parent: null, prerequisites: [] },
     body: "loops back to [[a]]",
   },
   {
     slug: "c",
     filePath: "data/c.md",
-    frontmatter: { title: "Coconut", tags: [], aliases: ["Cat"], video: null, updated: "2026-04-30" },
+    frontmatter: { title: "Coconut", tags: [], aliases: ["Cat"], video: null, updated: "2026-04-30", parent: null, prerequisites: [] },
     body: "no links",
   },
 ];
@@ -51,7 +51,7 @@ describe("buildBacklinks", () => {
       {
         slug: "d",
         filePath: "data/d.md",
-        frontmatter: { title: "D", tags: [], aliases: [], video: null, updated: "2026-04-30" },
+        frontmatter: { title: "D", tags: [], aliases: [], video: null, updated: "2026-04-30", parent: null, prerequisites: [] },
         body: "points to [[nowhere]]",
       },
     ];
@@ -64,7 +64,7 @@ describe("buildBacklinks", () => {
       {
         slug: "x",
         filePath: "data/x.md",
-        frontmatter: { title: "X", tags: [], aliases: [], video: null, updated: "2026-04-30" },
+        frontmatter: { title: "X", tags: [], aliases: [], video: null, updated: "2026-04-30", parent: null, prerequisites: [] },
         body: "talks about [[x]] itself",
       },
     ];
@@ -77,7 +77,7 @@ describe("buildBacklinks", () => {
       {
         slug: "y",
         filePath: "data/y.md",
-        frontmatter: { title: "Y", tags: [], aliases: [], video: null, updated: "2026-04-30" },
+        frontmatter: { title: "Y", tags: [], aliases: [], video: null, updated: "2026-04-30", parent: null, prerequisites: [] },
         body: "see [[ghost]] and again [[ghost]]",
       },
     ];

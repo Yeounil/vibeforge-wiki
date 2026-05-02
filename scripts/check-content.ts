@@ -144,6 +144,8 @@ export async function runCheck(vaultDir: string): Promise<CheckResult> {
       aliases: p.aliases,
       video: null,
       updated: p.updated,
+      parent: null,
+      prerequisites: [],
     },
     body: p.body,
   }));

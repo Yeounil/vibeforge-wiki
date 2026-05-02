@@ -4,6 +4,8 @@ export interface PageFrontmatter {
   aliases: string[];
   video: string | null;
   updated: string; // ISO date
+  parent: string | null;        // RAW value from YAML (title or alias). Resolved into tree elsewhere.
+  prerequisites: string[];      // RAW values from YAML.
 }
 
 export interface Page {

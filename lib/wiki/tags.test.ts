@@ -5,7 +5,7 @@ import type { Page } from "./types";
 const mk = (slug: string, tags: string[]): Page => ({
   slug,
   filePath: `data/${slug}.md`,
-  frontmatter: { title: slug, tags, aliases: [], video: null, updated: "2026-04-30" },
+  frontmatter: { title: slug, tags, aliases: [], video: null, updated: "2026-04-30", parent: null, prerequisites: [] },
   body: "",
 });
 
