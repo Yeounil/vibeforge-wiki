@@ -6,8 +6,10 @@ import {
   SigmaContainer,
   useLoadGraph,
   useRegisterEvents,
+  useCamera,
 } from "@react-sigma/core";
 import "@react-sigma/core/lib/style.css";
+import { useWorkerLayoutForceAtlas2 } from "@react-sigma/layout-forceatlas2";
 import Graph from "graphology";
 import { getCategoryMeta } from "@/lib/design/categories";
 import type { GraphData } from "@/lib/wiki/graph";
@@ -65,6 +67,37 @@ function GraphLoader({ data }: { data: GraphData }) {
   return null;
 }
 
+function LayoutDriver({ nodeCount }: { nodeCount: number }) {
+  const { start, stop } = useWorkerLayoutForceAtlas2({
+    settings: {
+      gravity: 1,
+      scalingRatio: 8,
+      slowDown: 1.5,
+      barnesHutOptimize: nodeCount > 50,
+    },
+  });
+  useEffect(() => {
+    start();
+    const cooldown = Math.min(2500 + nodeCount * 5, 6000);
+    const t = setTimeout(() => stop(), cooldown);
+    return () => {
+      clearTimeout(t);
+      stop();
+    };
+  }, [start, stop, nodeCount]);
+  return null;
+}
+
+function CameraFitter({ nodeCount }: { nodeCount: number }) {
+  const { reset } = useCamera({ duration: 600, factor: 1.5 });
+  useEffect(() => {
+    const cooldown = Math.min(2500 + nodeCount * 5, 6000);
+    const t = setTimeout(() => reset(), cooldown + 200);
+    return () => clearTimeout(t);
+  }, [reset, nodeCount]);
+  return null;
+}
+
 function ClickHandler() {
   const router = useRouter();
   const registerEvents = useRegisterEvents();
@@ -83,6 +116,8 @@ export function GraphViewInner({ data }: { data: GraphData }) {
       settings={SIGMA_SETTINGS}
     >
       <GraphLoader data={data} />
+      <LayoutDriver nodeCount={data.nodes.length} />
+      <CameraFitter nodeCount={data.nodes.length} />
       <ClickHandler />
     </SigmaContainer>
   );
