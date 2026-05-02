@@ -22,17 +22,20 @@ updated: 2026-05-01
 
 다른 페이지를 인용할 땐 `[[페이지 제목]]` 또는 `[[페이지 슬러그]]` 형태로:
 
-- `[[what-is-an-index]]` → 슬러그 매칭
-- `[[인덱스가 뭐예요?]]` → 제목 매칭
-- `[[DB 인덱스]]` → aliases 매칭
+- `[[Memex]]` → 슬러그 매칭
+- `[[관계형 데이터 모델]]` → 제목 매칭
+- `[[ACID]]` → aliases 매칭
 
 ## 카테고리 폴더
 
-- `data/data-handling/` — DB · SQL · 인덱스 · 트랜잭션
-- `data/how-computers-work/` — OS · 프로세스 · 메모리
-- `data/code-flow/` — 자료구조 · 알고리즘
+- `data/concepts/` — 추상 개념 (DB · OS · 자료구조 · 통계 등)
+- `data/entities/` — 도구·시스템 (Oracle, R, NotebookLM …)
+- `data/people/` — 인물 (E.F. Codd, Vannevar Bush …)
+- `data/sources/` — 강의 노트 · 원전 자료
 
 새 카테고리는 PR로 제안해주세요.
+
+> 참고: Q&A 톤의 입문 글(예: "트랜잭션이 뭐예요?")은 wiki가 아닌 [Forum의 Q&A 카테고리](/forum/qa)로 가요. wiki는 안정적인 reference, Q&A는 대화형 입문/토론.
 
 ## PR 절차
 
