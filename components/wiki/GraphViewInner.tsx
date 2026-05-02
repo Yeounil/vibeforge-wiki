@@ -47,15 +47,17 @@ function GraphLoader({ data }: { data: GraphData }) {
   useEffect(() => {
     const graph = new Graph();
     const degrees = computeDegrees(data);
-    for (const n of data.nodes) {
+    const total = data.nodes.length;
+    data.nodes.forEach((n, i) => {
+      const angle = (2 * Math.PI * i) / total;
       graph.addNode(n.id, {
-        x: Math.random(),
-        y: Math.random(),
+        x: Math.cos(angle),
+        y: Math.sin(angle),
         size: clampNodeSize(degrees.get(n.id) ?? 0),
         color: resolveColor(n.group),
         label: n.label,
       });
-    }
+    });
     for (const e of data.edges) {
       if (
         graph.hasNode(e.source) &&
@@ -76,6 +78,7 @@ function LayoutDriver({ nodeCount }: { nodeCount: number }) {
       gravity: 1,
       scalingRatio: 8,
       slowDown: 1.5,
+      strongGravityMode: true,
       barnesHutOptimize: nodeCount > 50,
     },
   });
