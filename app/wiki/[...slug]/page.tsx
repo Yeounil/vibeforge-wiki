@@ -1,6 +1,11 @@
 // app/wiki/[...slug]/page.tsx
 import { notFound } from "next/navigation";
-import { loadOnePage, getAllSlugs, getAllPages } from "@/lib/wiki/page-loader";
+import { loadOnePage, getAllSlugs, getAllPages, getHierarchy } from "@/lib/wiki/page-loader";
+import {
+  getParentChain,
+  getChildItems,
+  getPrereqItems,
+} from "@/lib/wiki/hierarchy";
 import { WikiPage } from "@/components/wiki/WikiPage";
 import { AppShell } from "@/components/layout/AppShell";
 import { Sidebar } from "@/components/layout/Sidebar";
@@ -10,6 +15,7 @@ import { Backlinks } from "@/components/wiki/Backlinks";
 import { RelatedQA } from "@/components/wiki/RelatedQA";
 import { GiscusEmbed } from "@/components/wiki/GiscusEmbed";
 import { SearchBox } from "@/components/wiki/SearchBox";
+import { getCategoryMeta } from "@/lib/design/categories";
 import { createClient } from "@/lib/supabase/server";
 import { listPostsByWikiSlug } from "@/lib/wiki-qa/queries";
 
@@ -19,11 +25,6 @@ export const dynamicParams = true;
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  // URL-encode each segment so the static .html files are named with the
-  // same encoded path the runtime sees. Without this, slugs containing
-  // spaces or non-ASCII chars (e.g. "관계형 데이터 모델") generate fine but
-  // 404 at request time because next start can't match the decoded URL
-  // to the literal-char filesystem path. Same pattern as wiki/tag/[tag].
   const slugs = await getAllSlugs();
   return slugs.map((slug) => ({
     slug: slug.split("/").map(encodeURIComponent),
@@ -36,20 +37,24 @@ export default async function WikiSlugPage({
   params: Promise<{ slug: string[] }>;
 }) {
   const { slug } = await params;
-  // params come URL-encoded from the matched static route; decode each
-  // segment to get back the canonical slug stored in the vault.
   const fullSlug = slug.map(decodeURIComponent).join("/");
   const bundle = await loadOnePage(fullSlug);
   if (!bundle) notFound();
 
   const all = await getAllPages();
+  const hierarchy = await getHierarchy();
   const sidebarPages = all.map((p) => ({
     slug: p.slug,
     title: p.frontmatter.title,
     category: p.slug.split("/")[0],
   }));
 
-  // Related Q&A: best-effort. If Supabase is down, render empty section.
+  const category = fullSlug.split("/")[0];
+  const categoryMeta = getCategoryMeta(category);
+  const parentChain = getParentChain(hierarchy, fullSlug, bundle.titleMap);
+  const childItems = getChildItems(hierarchy, fullSlug, bundle.titleMap);
+  const prereqItems = getPrereqItems(hierarchy, fullSlug, bundle.titleMap);
+
   let relatedQA: Awaited<ReturnType<typeof listPostsByWikiSlug>> = [];
   try {
     const supabase = await createClient();
@@ -61,7 +66,7 @@ export default async function WikiSlugPage({
   return (
     <AppShell
       headerSearch={<SearchBox />}
-      sidebar={<Sidebar pages={sidebarPages} currentSlug={fullSlug} />}
+      sidebar={<Sidebar pages={sidebarPages} tree={hierarchy} currentSlug={fullSlug} />}
       main={
         <>
           <WikiPage
@@ -70,6 +75,11 @@ export default async function WikiSlugPage({
             bodyHtml={bundle.bodyHtml}
             editBaseUrl={EDIT_BASE_URL}
             filePath={bundle.page.filePath}
+            category={category}
+            categoryLabel={categoryMeta.label}
+            parentChain={parentChain}
+            prereqItems={prereqItems}
+            childItems={childItems}
           />
           <GiscusEmbed pathname={`/wiki/${fullSlug}`} />
         </>

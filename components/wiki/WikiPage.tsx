@@ -1,5 +1,8 @@
 // components/wiki/WikiPage.tsx
 import type { PageFrontmatter } from "@/lib/wiki/types";
+import { Breadcrumb } from "./Breadcrumb";
+import { Prerequisites } from "./Prerequisites";
+import { ChildPages } from "./ChildPages";
 
 interface Props {
   slug: string;
@@ -9,6 +12,11 @@ interface Props {
   editBaseUrl: string | null;
   /** filePath relative to wiki repo root, e.g. "data/cat-a/page.md" */
   filePath: string;
+  category: string;
+  categoryLabel: string;
+  parentChain: { slug: string; title: string }[];
+  prereqItems: { slug: string; title: string }[];
+  childItems: { slug: string; title: string }[];
 }
 
 export function WikiPage({
@@ -17,9 +25,20 @@ export function WikiPage({
   bodyHtml,
   editBaseUrl,
   filePath,
+  category,
+  categoryLabel,
+  parentChain,
+  prereqItems,
+  childItems,
 }: Props) {
+  const breadcrumbChain = [
+    ...parentChain.map((node) => ({ slug: node.slug as string | null, title: node.title })),
+    { slug: null as string | null, title: frontmatter.title },
+  ];
+
   return (
     <article className="vf-card p-6 md:p-8">
+      <Breadcrumb category={category} categoryLabel={categoryLabel} chain={breadcrumbChain} />
       <header className="mb-6">
         <h1 className="text-3xl font-bold">{frontmatter.title}</h1>
         <div className="text-sm text-[var(--text-secondary)] mt-1">
@@ -54,7 +73,11 @@ export function WikiPage({
         </div>
       )}
 
+      <Prerequisites items={prereqItems} />
+
       <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: bodyHtml }} />
+
+      <ChildPages items={childItems} />
 
       {editBaseUrl && (
         <p className="mt-8 text-sm">

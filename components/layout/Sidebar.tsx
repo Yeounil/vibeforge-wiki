@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { Route } from "next";
 import { useEffect, useMemo, useState } from "react";
+import type React from "react";
 import { listCategories, getCategoryMeta } from "@/lib/design/categories";
 import type { VaultHierarchy } from "@/lib/wiki/hierarchy";
 
@@ -14,7 +15,7 @@ export interface SidebarPage {
 
 interface Props {
   pages: SidebarPage[];
-  tree: VaultHierarchy;
+  tree?: VaultHierarchy;
   currentSlug: string | null;
 }
 
@@ -45,7 +46,7 @@ function persistToggle(slug: string, expanded: boolean) {
   window.localStorage.setItem(STORAGE_PREFIX + slug, expanded ? "1" : "0");
 }
 
-export function Sidebar({ pages, tree, currentSlug }: Props) {
+export function Sidebar({ pages, tree = {}, currentSlug }: Props) {
   const order = listCategories().map((c) => c.slug);
   const titleMap = useMemo(() => {
     const m: Record<string, string> = {};
@@ -103,7 +104,7 @@ export function Sidebar({ pages, tree, currentSlug }: Props) {
     });
   }
 
-  function renderTreeNode(slug: string, depth: number, folderTree: NonNullable<VaultHierarchy[string]>): JSX.Element {
+  function renderTreeNode(slug: string, depth: number, folderTree: NonNullable<VaultHierarchy[string]>): React.ReactElement {
     const title = titleMap[slug] ?? slug;
     const isCurrent = slug === currentSlug;
     const children = folderTree.children[slug] ?? [];
