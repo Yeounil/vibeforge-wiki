@@ -16,3 +16,15 @@ VibeForge는 바이브코더를 위한 CS(컴퓨터 과학) 학습·토론 공�
 
 이 사이트와 위키는 누구나 PR을 보낼 수 있는 오픈 프로젝트입니다.
 [기여 가이드](/about/contribute)를 참조하세요.
+
+## 위키 로컬로 가져오기
+
+이 위키의 모든 마크다운 파일은 별도 GitHub 저장소에 있어서, 그대로 받아 LLM에 통째로 넣거나 오프라인에서 보기에 좋아요.
+
+```bash
+git clone https://github.com/Yeounil/vibeforge-wiki.git
+```
+
+저장소: <https://github.com/Yeounil/vibeforge-wiki>
+
+받은 후 `data/` 폴더 아래에 카테고리별 `.md` 파일이 들어있어요. 위키 사이트와 동일한 내용이며, 라이선스를 지키는 한 자유롭게 활용·수정해도 좋아요.

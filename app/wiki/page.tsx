@@ -5,6 +5,7 @@ import { listCategories, getCategoryMeta } from "@/lib/design/categories";
 import { AppShell } from "@/components/layout/AppShell";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { SearchBox } from "@/components/wiki/SearchBox";
+import { Pill } from "@/components/ui/Pill";
 
 export const metadata = {
   title: "Wiki — VibeForge",
@@ -41,13 +42,18 @@ export default async function WikiIndexPage() {
                 바이브코더가 알아두면 좋은 CS 지식. 카테고리별로 정리되어 있어요.
               </p>
             </div>
-            <Link
-              href={"/wiki/graph" as Route}
-              className="shrink-0 self-center px-4 py-2 rounded-md text-sm font-semibold text-white"
-              style={{ background: "var(--brand-gradient)" }}
-            >
-              그래프뷰 →
-            </Link>
+            <div className="shrink-0 self-center flex flex-wrap gap-2">
+              <Link
+                href={"/wiki/graph" as Route}
+                className="px-4 py-2 rounded-md text-sm font-semibold text-white"
+                style={{ background: "var(--brand-gradient)" }}
+              >
+                그래프뷰 →
+              </Link>
+              <Pill href={"/about#위키-로컬로-가져오기" as Route} variant="secondary" size="sm">
+                위키 다운로드
+              </Pill>
+            </div>
           </header>
 
           {orderedCats.map((cat) => {
