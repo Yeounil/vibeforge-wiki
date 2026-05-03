@@ -1,6 +1,14 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 
+vi.mock("./SiteHeader", () => ({
+  SiteHeader: () => (
+    <div data-testid="siteheader-stub">
+      <a href="/" aria-label="VibeForge">VibeForge</a>
+    </div>
+  ),
+}));
+
 vi.mock("@/lib/supabase/browser", () => ({
   createClient: () => ({
     auth: {
@@ -23,7 +31,6 @@ describe("AppShell", () => {
         right={<div>RIGHT</div>}
       />
     );
-    // sidebar appears in both the mobile drawer and the desktop aside
     expect(screen.getAllByText("SIDE").length).toBeGreaterThan(0);
     expect(screen.getByText("MAIN")).toBeInTheDocument();
     expect(screen.getByText("RIGHT")).toBeInTheDocument();

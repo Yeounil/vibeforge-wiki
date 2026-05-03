@@ -12,21 +12,43 @@ vi.mock("@/lib/supabase/browser", () => ({
   }),
 }));
 
+vi.mock("@/lib/supabase/server", () => ({
+  createClient: async () => ({
+    auth: {
+      getUser: () => Promise.resolve({ data: { user: null } }),
+    },
+    from: () => ({
+      select: () => ({
+        eq: () => ({
+          single: () => Promise.resolve({ data: null, error: null }),
+        }),
+      }),
+    }),
+  }),
+}));
+
 import { SiteHeader } from "./SiteHeader";
 
 describe("SiteHeader", () => {
-  it("renders logo, nav links, search slot, and auth button", () => {
-    render(<SiteHeader searchSlot={<input data-testid="s" />} />);
+  it("renders logo, nav links, search slot, and auth button", async () => {
+    const ui = await SiteHeader({ searchSlot: <input data-testid="s" /> });
+    render(ui);
     expect(screen.getByRole("link", { name: "VibeForge" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Wiki" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Forum" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "About" })).toBeInTheDocument();
     expect(screen.getByTestId("s")).toBeInTheDocument();
-    // AuthButton initially shows the loading "…" placeholder before async getUser resolves.
   });
 
-  it("renders without search slot", () => {
-    render(<SiteHeader />);
+  it("renders without search slot", async () => {
+    const ui = await SiteHeader({});
+    render(ui);
     expect(screen.getByRole("link", { name: "VibeForge" })).toBeInTheDocument();
+  });
+
+  it("omits Admin link for non-admin viewers", async () => {
+    const ui = await SiteHeader({});
+    render(ui);
+    expect(screen.queryByRole("link", { name: "Admin" })).toBeNull();
   });
 });
