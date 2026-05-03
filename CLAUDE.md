@@ -52,6 +52,7 @@ Anything that mentions a wiki page in either direction must round-trip through b
 - `/wiki/tag/[tag]`, `/wiki/graph` (force-graph), `/api/search` (minisearch)
 - `/forum`, `/forum/[category]` (`qa | general | notice`), `/forum/post/[id]`, `/forum/new`
 - `/about` (rendered from `site-pages/about.md` via `lib/site-pages/loader.ts`)
+- `/admin` — admin-only profile/role management; non-admins 404
 - `/auth/callback` — Supabase OAuth (GitHub) callback
 
 ### Auth + data layer

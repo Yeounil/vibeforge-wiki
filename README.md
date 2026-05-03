@@ -27,6 +27,18 @@ npm run dev
 
 빌드 시작 전 `scripts/build-indexes.ts`가 자동으로 vault를 스캔해서 `public/wiki-data/`에 backlink/tag/search 인덱스를 만듭니다.
 
+## Admin promotion
+
+The first admin must be minted manually in Supabase Studio (the SQL editor against your project) — once, with:
+
+```sql
+update public.profiles set role = 'admin' where github_login = '<your-github-login>';
+```
+
+After that, all admin promotion/demotion happens at `/admin` in-app. Non-admins (including anonymous visitors) are 404'd from that route — it does not appear in the public nav.
+
+The `role` column is locked from `authenticated` GRANTs (see `supabase/migrations/0004_lock_role_column.sql`), so no client can self-promote even by crafting a raw Supabase request.
+
 ## 테스트
 
 ```bash
