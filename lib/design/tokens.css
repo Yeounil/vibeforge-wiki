@@ -52,6 +52,19 @@
   --r-pill: 50px;
   --r-full: 9999px;
 
+  /* === Typography size scale (Figma display + body) === */
+  --t-display-xl: 86px;   /* hero headlines */
+  --t-display-lg: 64px;   /* section openers */
+  --t-headline:   26px;   /* in-block titles */
+  --t-subhead:    26px;   /* same size, different weight */
+  --t-card-title: 24px;
+  --t-body-lg:    20px;
+  --t-body:       18px;
+  --t-body-sm:    16px;
+  --t-button:     20px;
+  --t-eyebrow:    18px;   /* mono uppercase */
+  --t-caption:    12px;   /* mono uppercase */
+
   /* === Font weight === */
   --w-thin:     320;
   --w-light:    330;
@@ -100,6 +113,7 @@
     --block-navy:  #14111e;
 
     --semantic-success: #34d399;
+    --accent-magenta:   #f472b6;
     --overlay-scrim:    rgba(0,0,0,0.75);
 
     --bg-gradient: linear-gradient(135deg, #1a1325 0%, #2a1622 100%);
@@ -125,6 +139,18 @@
   --color-brand-from:   var(--brand-from);
   --color-brand-to:     var(--brand-to);
   --color-magenta:      var(--accent-magenta);
+
+  --text-display-xl: var(--t-display-xl);
+  --text-display-lg: var(--t-display-lg);
+  --text-headline:   var(--t-headline);
+  --text-subhead:    var(--t-subhead);
+  --text-card-title: var(--t-card-title);
+  --text-body-lg:    var(--t-body-lg);
+  --text-body:       var(--t-body);
+  --text-body-sm:    var(--t-body-sm);
+  --text-button:     var(--t-button);
+  --text-eyebrow:    var(--t-eyebrow);
+  --text-caption:    var(--t-caption);
 
   --radius-pill: var(--r-pill);
   --radius-lg:   var(--r-lg);
