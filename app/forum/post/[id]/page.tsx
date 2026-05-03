@@ -13,6 +13,7 @@ import { CommentForm } from "@/components/forum/CommentForm";
 import { RelatedWiki } from "@/components/forum/RelatedWiki";
 import { getAllPages, getAliasMap } from "@/lib/wiki/page-loader";
 import { renderBody } from "@/lib/wiki/render";
+import { PostActions } from "@/components/forum/PostActions";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -38,6 +39,18 @@ export default async function ForumPostPage({
   ]);
   if (!post) notFound();
   const user = userResult.data.user;
+  let isAdmin = false;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+    isAdmin = profile?.role === "admin";
+  }
+  const isAuthor = !!user && post.author_id === user.id;
+  const canEdit = isAuthor || isAdmin;
+  const canDelete = isAuthor || isAdmin;
   const sidebarPages = all.map((p) => ({
     slug: p.slug,
     title: p.frontmatter.title,
@@ -80,6 +93,11 @@ export default async function ForumPostPage({
                 {post.created_at.slice(0, 10)}
               </span>
             </div>
+            {(canEdit || canDelete) && (
+              <div className="mb-3">
+                <PostActions postId={post.id} canEdit={canEdit} canDelete={canDelete} />
+              </div>
+            )}
             <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
             <div
               className="prose max-w-none"
