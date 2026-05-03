@@ -14,6 +14,7 @@ import { RelatedWiki } from "@/components/forum/RelatedWiki";
 import { getAllPages, getAliasMap } from "@/lib/wiki/page-loader";
 import { renderBody } from "@/lib/wiki/render";
 import { PostActions } from "@/components/forum/PostActions";
+import { CommentItem } from "@/components/forum/CommentItem";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -114,14 +115,18 @@ export default async function ForumPostPage({
               <ul className="space-y-3 mb-4">
                 {comments.map((c) => {
                   const cAuthor = c.author?.display_name ?? c.author?.github_login ?? "익명";
+                  const cIsAuthor = !!user && c.author_id === user.id;
                   return (
-                    <li key={c.id} className="border-t border-black/5 pt-3 first:border-0 first:pt-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium">{cAuthor}</span>
-                        <span className="text-xs text-[var(--ink-muted)]">{c.created_at.slice(0, 10)}</span>
-                      </div>
-                      <p className="text-sm whitespace-pre-wrap">{c.body_md}</p>
-                    </li>
+                    <CommentItem
+                      key={c.id}
+                      id={c.id}
+                      postId={post.id}
+                      authorName={cAuthor}
+                      bodyMd={c.body_md}
+                      createdAt={c.created_at}
+                      canEdit={cIsAuthor || isAdmin}
+                      canDelete={cIsAuthor || isAdmin}
+                    />
                   );
                 })}
               </ul>
