@@ -31,7 +31,7 @@ describe("GiscusEmbed", () => {
     expect(script!.getAttribute("data-category")).toBe("Page Comments");
     expect(script!.getAttribute("data-category-id")).toBe("DIC_x");
     expect(script!.getAttribute("data-mapping")).toBe("pathname");
-    expect(script!.getAttribute("data-theme")).toBe("light");
+    expect(script!.getAttribute("data-theme")).toBe("preferred_color_scheme");
     expect(script!.getAttribute("data-lang")).toBe("ko");
   });
 

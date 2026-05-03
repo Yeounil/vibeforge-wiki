@@ -38,7 +38,7 @@ export function GiscusEmbed({ pathname }: Props) {
     script.setAttribute("data-mapping", "pathname");
     script.setAttribute("data-strict", "1");
     script.setAttribute("data-input-position", "bottom");
-    script.setAttribute("data-theme", "light");
+    script.setAttribute("data-theme", "preferred_color_scheme");
     script.setAttribute("data-lang", "ko");
     script.setAttribute("data-loading", "lazy");
     containerRef.current.appendChild(script);
