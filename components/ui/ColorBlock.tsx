@@ -1,10 +1,10 @@
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 
 type BlockVariant = "lilac" | "mint" | "cream" | "pink" | "navy";
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLElement> {
   variant: BlockVariant;
-  as?: "section" | "div";
+  as?: "section" | "div" | "nav";
   className?: string;
   children: ReactNode;
 }
@@ -20,10 +20,10 @@ const variantClass: Record<BlockVariant, string> = {
 const baseClass =
   "rounded-[var(--r-lg)] p-[var(--s-xxl)] md:rounded-[var(--r-lg)]";
 
-export function ColorBlock({ variant, as = "section", className = "", children }: Props) {
+export function ColorBlock({ variant, as = "section", className = "", children, ...rest }: Props) {
   const Tag = as;
   return (
-    <Tag className={`${baseClass} ${variantClass[variant]} ${className}`}>
+    <Tag className={`${baseClass} ${variantClass[variant]} ${className}`} {...rest}>
       {children}
     </Tag>
   );

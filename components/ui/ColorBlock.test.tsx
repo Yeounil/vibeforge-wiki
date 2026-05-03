@@ -32,4 +32,10 @@ describe("ColorBlock", () => {
     render(<ColorBlock variant="mint" as="div">x</ColorBlock>);
     expect(getRoot("x").tagName).toBe("DIV");
   });
+
+  it("renders as <nav> when as='nav' and forwards aria-label", () => {
+    render(<ColorBlock variant="lilac" as="nav" aria-label="Backlinks">x</ColorBlock>);
+    const root = screen.getByRole("navigation", { name: "Backlinks" });
+    expect(root.tagName).toBe("NAV");
+  });
 });
