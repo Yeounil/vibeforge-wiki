@@ -24,7 +24,7 @@ export function ColorBlock({ variant, as = "section", className = "", children }
   const Tag = as;
   return (
     <Tag className={`${baseClass} ${variantClass[variant]} ${className}`}>
-      <div>{children}</div>
+      {children}
     </Tag>
   );
 }
