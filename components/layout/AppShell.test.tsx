@@ -1,10 +1,11 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import Link from "next/link";
 
 vi.mock("./SiteHeader", () => ({
   SiteHeader: () => (
     <div data-testid="siteheader-stub">
-      <a href="/" aria-label="VibeForge">VibeForge</a>
+      <Link href="/" aria-label="VibeForge">VibeForge</Link>
     </div>
   ),
 }));
