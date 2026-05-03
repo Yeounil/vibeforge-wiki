@@ -37,11 +37,11 @@ export function WikiPage({
   ];
 
   return (
-    <article className="vf-card p-6 md:p-8">
+    <article className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6 md:p-8">
       <Breadcrumb category={category} categoryLabel={categoryLabel} chain={breadcrumbChain} />
       <header className="mb-6">
         <h1 className="text-3xl font-bold">{frontmatter.title}</h1>
-        <div className="text-sm text-[var(--text-secondary)] mt-1">
+        <div className="text-sm text-[var(--ink-muted)] mt-1">
           updated {frontmatter.updated}
           {frontmatter.tags.length > 0 && (
             <>
@@ -50,7 +50,7 @@ export function WikiPage({
                 <span key={t}>
                   <a
                     href={`/wiki/tag/${encodeURIComponent(t)}`}
-                    className="underline hover:text-[var(--text-primary)]"
+                    className="underline hover:text-[var(--ink)]"
                   >
                     {t}
                   </a>
@@ -92,7 +92,7 @@ export function WikiPage({
         </p>
       )}
 
-      <p className="mt-2 text-xs text-[var(--text-secondary)] opacity-60">slug: {slug}</p>
+      <p className="mt-2 text-xs text-[var(--ink-muted)] opacity-60">slug: {slug}</p>
     </article>
   );
 }

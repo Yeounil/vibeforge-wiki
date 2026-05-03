@@ -72,11 +72,11 @@ export default async function ForumPostPage({
       }
       main={
         <div className="space-y-4">
-          <article className="vf-card p-6 md:p-8">
+          <article className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6 md:p-8">
             <div className="flex items-center gap-2 mb-3">
               <CategoryBadge category={post.category} />
-              <span className="text-sm text-[var(--text-secondary)]">{authorName}</span>
-              <span className="text-sm text-[var(--text-secondary)] ml-auto">
+              <span className="text-sm text-[var(--ink-muted)]">{authorName}</span>
+              <span className="text-sm text-[var(--ink-muted)] ml-auto">
                 {post.created_at.slice(0, 10)}
               </span>
             </div>
@@ -86,12 +86,12 @@ export default async function ForumPostPage({
               dangerouslySetInnerHTML={{ __html: bodyHtml }}
             />
           </article>
-          <section className="vf-card p-6">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--text-secondary)] mb-3">
+          <section className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--ink-muted)] mb-3">
               댓글 {comments.length}
             </h2>
             {comments.length === 0 ? (
-              <p className="text-sm text-[var(--text-secondary)] mb-4">첫 댓글을 남겨보세요.</p>
+              <p className="text-sm text-[var(--ink-muted)] mb-4">첫 댓글을 남겨보세요.</p>
             ) : (
               <ul className="space-y-3 mb-4">
                 {comments.map((c) => {
@@ -100,7 +100,7 @@ export default async function ForumPostPage({
                     <li key={c.id} className="border-t border-black/5 pt-3 first:border-0 first:pt-0">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-sm font-medium">{cAuthor}</span>
-                        <span className="text-xs text-[var(--text-secondary)]">{c.created_at.slice(0, 10)}</span>
+                        <span className="text-xs text-[var(--ink-muted)]">{c.created_at.slice(0, 10)}</span>
                       </div>
                       <p className="text-sm whitespace-pre-wrap">{c.body_md}</p>
                     </li>
@@ -111,7 +111,7 @@ export default async function ForumPostPage({
             {user ? (
               <CommentForm postId={post.id} />
             ) : (
-              <p className="text-sm text-[var(--text-secondary)]">
+              <p className="text-sm text-[var(--ink-muted)]">
                 댓글을 달려면 <Link href="/forum" className="underline">로그인</Link>이 필요해요.
               </p>
             )}

@@ -50,25 +50,25 @@ export function SearchBox() {
         placeholder="위키 검색…"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="w-full bg-white/70 backdrop-blur rounded-full px-4 py-2 text-sm border border-black/5 focus:outline-none focus:ring-2 focus:ring-[var(--accent-from)]/30"
+        className="w-full bg-white/70 backdrop-blur rounded-full px-4 py-2 text-sm border border-black/5 focus:outline-none focus:ring-2 focus:ring-[var(--brand-from)]/30"
         aria-label="Search wiki"
       />
       {loading && (
-        <p className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[var(--text-secondary)]">
+        <p className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[var(--ink-muted)]">
           검색 중…
         </p>
       )}
       {hits.length > 0 && (
-        <ul className="absolute z-10 mt-1 w-full vf-card divide-y divide-black/5 max-h-80 overflow-auto">
+        <ul className="absolute z-10 mt-1 w-full bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] divide-y divide-black/5 max-h-80 overflow-auto">
           {hits.map((h) => (
             <li key={h.slug} className="p-3 hover:bg-black/5">
               <Link
                 href={`/wiki/${h.slug}` as Route}
-                className="text-[var(--text-primary)] font-medium"
+                className="text-[var(--ink)] font-medium"
               >
                 {h.title}
               </Link>
-              <span className="text-xs text-[var(--text-secondary)] ml-2">{h.slug}</span>
+              <span className="text-xs text-[var(--ink-muted)] ml-2">{h.slug}</span>
             </li>
           ))}
         </ul>

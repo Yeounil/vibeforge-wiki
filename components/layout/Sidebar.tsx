@@ -120,7 +120,7 @@ export function Sidebar({ pages, tree = {}, currentSlug }: Props) {
               onClick={() => toggle(slug)}
               aria-expanded={isOpen}
               aria-label={`${title} ${isOpen ? "접기" : "펼치기"}`}
-              className="w-4 text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-xs"
+              className="w-4 text-[var(--ink-muted)] hover:text-[var(--ink)] text-xs"
             >
               {isOpen ? "▾" : "▸"}
             </button>
@@ -132,8 +132,8 @@ export function Sidebar({ pages, tree = {}, currentSlug }: Props) {
             aria-current={isCurrent ? "page" : undefined}
             className={
               isCurrent
-                ? "text-[var(--text-primary)] font-medium"
-                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                ? "text-[var(--ink)] font-medium"
+                : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
             }
           >
             {title}
@@ -151,7 +151,7 @@ export function Sidebar({ pages, tree = {}, currentSlug }: Props) {
   return (
     <nav
       aria-label="Categories"
-      className="bg-[var(--surface-card)] rounded-[var(--radius-card)] shadow-[var(--surface-shadow)] p-4"
+      className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-4"
     >
       {knownThenRest.map((cat) => {
         const meta = getCategoryMeta(cat);
@@ -159,7 +159,7 @@ export function Sidebar({ pages, tree = {}, currentSlug }: Props) {
         const useTree = folderTree && folderTree.roots.length > 0;
         return (
           <div key={cat} className="mb-4 last:mb-0">
-            <div className="flex items-center gap-2 text-sm font-semibold text-[var(--text-primary)] mb-2">
+            <div className="flex items-center gap-2 text-sm font-semibold text-[var(--ink)] mb-2">
               <span
                 aria-hidden
                 className="inline-block w-2 h-2 rounded-full"
@@ -179,8 +179,8 @@ export function Sidebar({ pages, tree = {}, currentSlug }: Props) {
                           aria-current={isCurrent ? "page" : undefined}
                           className={
                             isCurrent
-                              ? "text-[var(--text-primary)] font-medium"
-                              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                              ? "text-[var(--ink)] font-medium"
+                              : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
                           }
                         >
                           {p.title}

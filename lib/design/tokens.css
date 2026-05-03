@@ -77,16 +77,6 @@
   --font-sans: var(--font-geist), var(--font-pretendard), system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "JetBrains Mono", "SF Mono", monospace;
 
-  /* === Legacy aliases — TODO remove in PR 5 cleanup === */
-  --surface-card:    var(--canvas);
-  --surface-shadow:  0 4px 24px rgba(124, 58, 237, 0.08);
-  --text-primary:    var(--ink);
-  --text-secondary:  var(--ink-muted);
-  --accent-from:     var(--brand-from);
-  --accent-to:       var(--brand-to);
-  --accent-cta:      var(--brand-gradient);
-  --radius-card:     var(--r-md);
-
   /* Category colors — keep existing */
   --cat-concepts: #3b82f6;
   --cat-entities: #ec4899;
@@ -117,9 +107,6 @@
     --overlay-scrim:    rgba(0,0,0,0.75);
 
     --bg-gradient: linear-gradient(135deg, #1a1325 0%, #2a1622 100%);
-
-    /* Legacy alias overrides */
-    --surface-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   }
 }
 

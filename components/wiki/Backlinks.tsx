@@ -18,7 +18,7 @@ export function Backlinks({ slugs, titleMap }: Props) {
           <li key={slug}>
             <Link
               href={`/wiki/${slug}` as Route}
-              className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              className="text-[var(--ink-muted)] hover:text-[var(--ink)]"
             >
               {titleMap[slug] ?? slug}
             </Link>

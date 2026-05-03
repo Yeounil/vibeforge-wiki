@@ -34,17 +34,17 @@ export default async function WikiIndexPage() {
       sidebar={<Sidebar pages={sidebarPages} tree={hierarchy} currentSlug={null} />}
       main={
         <div className="space-y-6">
-          <header className="vf-card p-6 flex items-start justify-between gap-4">
+          <header className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6 flex items-start justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold">Wiki</h1>
-              <p className="mt-2 text-[var(--text-secondary)]">
+              <p className="mt-2 text-[var(--ink-muted)]">
                 바이브코더가 알아두면 좋은 CS 지식. 카테고리별로 정리되어 있어요.
               </p>
             </div>
             <Link
               href={"/wiki/graph" as Route}
               className="shrink-0 self-center px-4 py-2 rounded-md text-sm font-semibold text-white"
-              style={{ background: "var(--accent-cta)" }}
+              style={{ background: "var(--brand-gradient)" }}
             >
               그래프뷰 →
             </Link>
@@ -67,7 +67,7 @@ export default async function WikiIndexPage() {
             });
 
             return (
-              <section key={cat} className="vf-card p-6">
+              <section key={cat} className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6">
                 <h2 className="flex items-center gap-2 text-xl font-semibold mb-4">
                   <span
                     aria-hidden
@@ -84,17 +84,17 @@ export default async function WikiIndexPage() {
                       <li key={rootSlug}>
                         <Link
                           href={`/wiki/${rootSlug}` as Route}
-                          className="font-medium text-[var(--text-primary)] hover:underline"
+                          className="font-medium text-[var(--ink)] hover:underline"
                         >
                           {titleMap[rootSlug] ?? rootSlug}
                         </Link>
                         {children.length > 0 && (
-                          <div className="mt-1 text-sm text-[var(--text-secondary)] pl-3">
+                          <div className="mt-1 text-sm text-[var(--ink-muted)] pl-3">
                             {children.map((c, i) => (
                               <span key={c}>
                                 <Link
                                   href={`/wiki/${c}` as Route}
-                                  className="hover:text-[var(--text-primary)]"
+                                  className="hover:text-[var(--ink)]"
                                 >
                                   {titleMap[c] ?? c}
                                 </Link>
@@ -110,15 +110,15 @@ export default async function WikiIndexPage() {
 
                 {orphans.length > 0 && (
                   <div className="mt-4 pt-4 border-t border-[var(--border-subtle,rgba(0,0,0,0.08))]">
-                    <p className="text-xs uppercase tracking-wide text-[var(--text-secondary)] mb-2">
+                    <p className="text-xs uppercase tracking-wide text-[var(--ink-muted)] mb-2">
                       독립 항목
                     </p>
-                    <div className="text-sm text-[var(--text-secondary)]">
+                    <div className="text-sm text-[var(--ink-muted)]">
                       {orphans.map((s, i) => (
                         <span key={s}>
                           <Link
                             href={`/wiki/${s}` as Route}
-                            className="hover:text-[var(--text-primary)]"
+                            className="hover:text-[var(--ink)]"
                           >
                             {titleMap[s] ?? s}
                           </Link>

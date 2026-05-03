@@ -48,9 +48,9 @@ export function GiscusEmbed({ pathname }: Props) {
   if (!env) return null;
 
   return (
-    <section className="mt-10 vf-card p-6">
+    <section className="mt-10 bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6">
       <h2 className="text-lg font-semibold mb-2">댓글</h2>
-      <p className="text-sm text-[var(--text-secondary)] mb-4">
+      <p className="text-sm text-[var(--ink-muted)] mb-4">
         더 본격적인 질문은{" "}
         <Link href={"/forum/qa" as Route} className="underline">
           Q&amp;A

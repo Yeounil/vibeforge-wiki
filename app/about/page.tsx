@@ -24,7 +24,7 @@ export default async function AboutPage() {
       <SiteHeader />
       <main className="max-w-3xl mx-auto mt-6">
         <article
-          className="vf-card p-6 md:p-8 prose max-w-none"
+          className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6 md:p-8 prose max-w-none"
           dangerouslySetInnerHTML={{ __html: html }}
         />
         <div className="mt-6 flex flex-wrap gap-3">

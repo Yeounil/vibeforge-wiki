@@ -4,7 +4,7 @@ import { Pill, ColorBlock, Eyebrow } from "@/components/ui";
 export default function HomePage() {
   return (
     <main className="min-h-screen p-4 md:p-6 bg-[var(--bg-gradient)]">
-      <div className="max-w-4xl mx-auto mt-12 md:mt-24 vf-card p-8 md:p-12 text-center">
+      <div className="max-w-4xl mx-auto mt-12 md:mt-24 bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-8 md:p-12 text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">VibeForge</h1>
         <p className="text-lg text-[var(--ink-muted)] mb-8">
           바이브코더를 위한 CS 학습·토론 사이트.

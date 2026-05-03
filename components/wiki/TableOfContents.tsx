@@ -26,7 +26,7 @@ export function TableOfContents({ bodyHtml }: Props) {
   if (items.length === 0) return null;
   return (
     <nav aria-label="Table of contents" className="text-sm">
-      <h2 className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)] mb-2">
+      <h2 className="text-xs font-semibold uppercase tracking-wide text-[var(--ink-muted)] mb-2">
         목차
       </h2>
       <ul className="space-y-1">
@@ -34,7 +34,7 @@ export function TableOfContents({ bodyHtml }: Props) {
           <li key={h.id} className={h.level === 3 ? "pl-3" : ""}>
             <a
               href={`#${h.id}`}
-              className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              className="text-[var(--ink-muted)] hover:text-[var(--ink)]"
             >
               {h.text}
             </a>

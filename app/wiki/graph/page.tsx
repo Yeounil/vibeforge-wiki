@@ -32,8 +32,8 @@ export default async function GraphPage() {
       <div className="p-4 md:p-6">
         <SiteHeader />
       </div>
-      <div className="px-4 md:px-6 pb-3 flex flex-wrap items-center gap-4 text-sm text-[var(--text-secondary)]">
-        <Link href="/wiki" className="underline hover:text-[var(--text-primary)]">
+      <div className="px-4 md:px-6 pb-3 flex flex-wrap items-center gap-4 text-sm text-[var(--ink-muted)]">
+        <Link href="/wiki" className="underline hover:text-[var(--ink)]">
           ← Wiki로 돌아가기
         </Link>
         <span>
@@ -53,7 +53,7 @@ export default async function GraphPage() {
         </div>
       </div>
       <div className="flex-1 px-4 md:px-6 pb-6 flex flex-col min-h-0">
-        <div className="vf-card flex-1 min-h-0 overflow-hidden flex flex-col">
+        <div className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] flex-1 min-h-0 overflow-hidden flex flex-col">
           <GraphView data={data} />
         </div>
       </div>

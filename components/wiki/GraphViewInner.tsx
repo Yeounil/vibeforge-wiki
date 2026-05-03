@@ -216,8 +216,8 @@ export function GraphViewInner({ data }: { data: GraphData }) {
           className="absolute inset-0 flex flex-col items-center justify-center gap-4 pointer-events-none z-10"
           aria-live="polite"
         >
-          <div className="w-10 h-10 rounded-full border-2 border-[var(--accent-from)] border-t-transparent animate-spin" />
-          <p className="text-sm text-[var(--text-secondary)]">
+          <div className="w-10 h-10 rounded-full border-2 border-[var(--brand-from)] border-t-transparent animate-spin" />
+          <p className="text-sm text-[var(--ink-muted)]">
             그래프 정렬 중…
           </p>
         </div>

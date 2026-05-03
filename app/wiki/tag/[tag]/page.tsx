@@ -58,15 +58,15 @@ export default async function TagPage({
       headerSearch={<SearchBox />}
       sidebar={<Sidebar pages={sidebarPages} currentSlug={null} />}
       main={
-        <div className="vf-card p-6">
+        <div className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6">
           <h1 className="text-2xl font-bold mb-1">#{tag}</h1>
-          <p className="text-sm text-[var(--text-secondary)] mb-4">{slugs.length}개 페이지</p>
+          <p className="text-sm text-[var(--ink-muted)] mb-4">{slugs.length}개 페이지</p>
           <ul className="space-y-2">
             {slugs.map((s) => (
               <li key={s}>
                 <Link
                   href={`/wiki/${s}` as Route}
-                  className="block px-3 py-2 rounded-md hover:bg-black/5 text-[var(--text-primary)]"
+                  className="block px-3 py-2 rounded-md hover:bg-black/5 text-[var(--ink)]"
                 >
                   {titleBySlug[s] ?? s}
                 </Link>
@@ -74,7 +74,7 @@ export default async function TagPage({
             ))}
           </ul>
           <p className="mt-6 text-sm">
-            <Link href="/wiki" className="underline hover:text-[var(--text-primary)]">
+            <Link href="/wiki" className="underline hover:text-[var(--ink)]">
               ← Wiki 홈
             </Link>
           </p>

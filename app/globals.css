@@ -12,13 +12,6 @@ body {
   min-height: 100vh;
 }
 
-/* Card utility for content surfaces */
-.vf-card {
-  background: var(--surface-card);
-  border-radius: var(--radius-card);
-  box-shadow: var(--surface-shadow);
-}
-
 /* Broken wiki-link styling (Plan 1, Task 1.11) */
 a[data-broken="true"] {
   color: #999;
@@ -37,14 +30,14 @@ a[data-broken="true"]::after {
 /* Wiki body typography — bridges typography plugin defaults to site palette.
    Tokens defined in lib/design/tokens.css. */
 .prose {
-  --tw-prose-body: var(--text-primary);
-  --tw-prose-headings: var(--text-primary);
-  --tw-prose-links: var(--accent-from);
-  --tw-prose-bold: var(--text-primary);
-  --tw-prose-code: var(--text-primary);
-  --tw-prose-pre-code: var(--text-primary);
+  --tw-prose-body: var(--ink);
+  --tw-prose-headings: var(--ink);
+  --tw-prose-links: var(--brand-from);
+  --tw-prose-bold: var(--ink);
+  --tw-prose-code: var(--ink);
+  --tw-prose-pre-code: var(--ink);
   --tw-prose-pre-bg: rgba(0, 0, 0, 0.04);
-  --tw-prose-quotes: var(--text-secondary);
+  --tw-prose-quotes: var(--ink-muted);
 }
 
 /* Tables — rounded corners with subtle accent header */
@@ -70,7 +63,7 @@ a[data-broken="true"]::after {
   background: rgba(0, 0, 0, 0.04);
   padding: 1em;
   border-radius: 8px;
-  color: var(--text-primary);
+  color: var(--ink);
 }
 .prose pre code {
   background: transparent;
@@ -86,7 +79,7 @@ a[data-broken="true"]::after {
    without the guard, broken links inside .prose lose their gray
    strikethrough to the higher-specificity wiki-link styling. */
 .prose a[data-wiki-target]:not([data-broken="true"]) {
-  color: var(--accent-from);
+  color: var(--brand-from);
   text-decoration: underline dotted;
   text-underline-offset: 0.2em;
   text-decoration-thickness: 1.5px;

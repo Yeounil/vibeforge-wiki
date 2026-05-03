@@ -15,7 +15,7 @@ export function RelatedQA({ posts }: Props) {
       <Eyebrow>RELATED Q&amp;A</Eyebrow>
       <h2 className="text-xl font-medium mt-2 mb-4">관련 질문</h2>
       {posts.length === 0 ? (
-        <p className="text-[var(--text-secondary)]">
+        <p className="text-[var(--ink-muted)]">
           이 페이지를 인용한 토론이 아직 없어요.{" "}
           <Link href="/forum/qa" className="underline">
             Q&A에 묻기
@@ -32,12 +32,12 @@ export function RelatedQA({ posts }: Props) {
                   <CategoryBadge category={p.category} />
                   <Link
                     href={`/forum/post/${p.id}`}
-                    className="text-[var(--text-primary)] hover:underline"
+                    className="text-[var(--ink)] hover:underline"
                   >
                     {p.title}
                   </Link>
                 </div>
-                <div className="text-xs text-[var(--text-secondary)]">
+                <div className="text-xs text-[var(--ink-muted)]">
                   {author} · {p.created_at.slice(0, 10)}
                 </div>
               </li>

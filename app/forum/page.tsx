@@ -32,9 +32,9 @@ export default async function ForumLanding() {
       sidebar={<Sidebar pages={sidebarPages} currentSlug={null} />}
       main={
         <div className="space-y-6">
-          <header className="vf-card p-6">
+          <header className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6">
             <h1 className="text-3xl font-bold mb-2">Forum</h1>
-            <p className="text-[var(--text-secondary)]">
+            <p className="text-[var(--ink-muted)]">
               질문, 토론, 공지를 한 곳에서. Q&A는 시나리오 태그로 분류됩니다.
             </p>
           </header>
@@ -43,13 +43,13 @@ export default async function ForumLanding() {
               <Link
                 key={cat}
                 href={`/forum/${cat}` as Route}
-                className="vf-card p-4 hover:shadow-lg transition"
+                className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-4 hover:shadow-lg transition"
               >
                 <div className="flex items-center justify-between mb-1">
                   <CategoryBadge category={cat} />
-                  <span className="text-xs text-[var(--text-secondary)]">{counts[cat]}개</span>
+                  <span className="text-xs text-[var(--ink-muted)]">{counts[cat]}개</span>
                 </div>
-                <p className="text-sm text-[var(--text-secondary)]">
+                <p className="text-sm text-[var(--ink-muted)]">
                   {CATEGORY_LABELS[cat]}로 가기 →
                 </p>
               </Link>

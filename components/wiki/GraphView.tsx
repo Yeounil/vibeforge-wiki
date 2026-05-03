@@ -12,7 +12,7 @@ const GraphViewInner = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-full flex items-center justify-center text-[var(--text-secondary)]">
+      <div className="h-full flex items-center justify-center text-[var(--ink-muted)]">
         그래프 불러오는 중…
       </div>
     ),
@@ -22,8 +22,8 @@ const GraphViewInner = dynamic(
 export function GraphView({ data }: Props) {
   if (data.nodes.length < 2) {
     return (
-      <div className="vf-card p-8 text-center">
-        <p className="text-[var(--text-secondary)]">
+      <div className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-8 text-center">
+        <p className="text-[var(--ink-muted)]">
           페이지가 더 쌓이면 그래프가 풍성해져요.
         </p>
       </div>

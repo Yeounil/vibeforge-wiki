@@ -41,15 +41,15 @@ export default async function ForumCategoryPage({
       sidebar={<Sidebar pages={sidebarPages} currentSlug={null} />}
       main={
         <div className="space-y-4">
-          <header className="vf-card p-6 flex items-center justify-between">
+          <header className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6 flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold mb-1">{CATEGORY_LABELS[cat]}</h1>
-              <p className="text-sm text-[var(--text-secondary)]">{posts.length}개 글</p>
+              <p className="text-sm text-[var(--ink-muted)]">{posts.length}개 글</p>
             </div>
             <Link
               href={`/forum/new?cat=${cat}` as Route}
               className="px-4 py-2 rounded-full text-sm font-semibold text-white shadow-sm hover:opacity-90"
-              style={{ background: "var(--accent-cta)" }}
+              style={{ background: "var(--brand-gradient)" }}
             >
               새 글
             </Link>

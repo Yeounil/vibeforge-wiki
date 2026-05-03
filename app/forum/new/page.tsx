@@ -39,19 +39,19 @@ export default async function NewPostPage({
       sidebar={<Sidebar pages={sidebarPages} currentSlug={null} />}
       main={
         <div className="space-y-4">
-          <header className="vf-card p-6">
+          <header className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6">
             <h1 className="text-2xl font-bold">새 글 작성</h1>
           </header>
           {user ? (
             <NewPostForm defaultCategory={defaultCat} />
           ) : (
-            <div className="vf-card p-6 text-center">
-              <p className="text-[var(--text-secondary)] mb-4">
+            <div className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6 text-center">
+              <p className="text-[var(--ink-muted)] mb-4">
                 글을 쓰려면 GitHub 로그인이 필요해요.
               </p>
               <Link
                 href="/forum"
-                className="text-sm underline hover:text-[var(--text-primary)]"
+                className="text-sm underline hover:text-[var(--ink)]"
               >
                 ← Forum으로 돌아가기
               </Link>
