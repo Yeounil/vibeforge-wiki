@@ -10,10 +10,10 @@ interface Props {
 
 export function AppShell({ sidebar, main, right, headerSearch }: Props) {
   return (
-    <div className="min-h-screen p-4 md:p-6 bg-[var(--bg-gradient)]">
+    <div className="min-h-screen p-4 md:p-6">
       <SiteHeader searchSlot={headerSearch} />
 
-      <details className="mt-4 md:hidden vf-card">
+      <details className="mt-4 md:hidden bg-[var(--canvas)] rounded-[var(--r-md)] border border-[var(--hairline)]">
         <summary className="px-4 py-3 cursor-pointer text-sm font-semibold">
           카테고리
         </summary>

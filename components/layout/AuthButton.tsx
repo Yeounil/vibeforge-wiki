@@ -3,6 +3,7 @@
 
 import { useUser } from "@/lib/auth/use-user";
 import { createClient } from "@/lib/supabase/browser";
+import { Pill } from "@/components/ui";
 
 export function AuthButton() {
   const { user, loading } = useUser();
@@ -23,7 +24,7 @@ export function AuthButton() {
   }
 
   if (loading) {
-    return <span className="text-sm text-[var(--text-secondary)]">…</span>;
+    return <span className="text-sm text-[var(--ink-muted)]">…</span>;
   }
 
   if (user) {
@@ -34,26 +35,17 @@ export function AuthButton() {
       "user";
     return (
       <div className="flex items-center gap-2 text-sm">
-        <span className="text-[var(--text-secondary)]">{name}</span>
-        <button
-          type="button"
-          onClick={signOut}
-          className="px-3 py-1 rounded-full text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-black/10"
-        >
+        <span className="text-[var(--ink-muted)]">{name}</span>
+        <Pill variant="secondary" size="sm" type="button" onClick={signOut}>
           로그아웃
-        </button>
+        </Pill>
       </div>
     );
   }
 
   return (
-    <button
-      type="button"
-      onClick={signIn}
-      className="px-3 py-1 rounded-full text-sm font-semibold text-white shadow-sm hover:opacity-90"
-      style={{ background: "var(--accent-cta)" }}
-    >
+    <Pill variant="primary" size="sm" type="button" onClick={signIn}>
       GitHub 로그인
-    </button>
+    </Pill>
   );
 }
