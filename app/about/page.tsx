@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { loadSitePage } from "@/lib/site-pages/loader";
 import { renderBody } from "@/lib/wiki/render";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { Pill } from "@/components/ui";
+import type { Route } from "next";
 
 export const metadata = {
   title: "About — VibeForge",
@@ -25,6 +27,10 @@ export default async function AboutPage() {
           className="vf-card p-6 md:p-8 prose max-w-none"
           dangerouslySetInnerHTML={{ __html: html }}
         />
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Pill href={"/wiki" as Route} variant="secondary">위키 둘러보기</Pill>
+          <Pill href={"/forum" as Route} variant="secondary">포럼 보기</Pill>
+        </div>
       </main>
     </div>
   );
