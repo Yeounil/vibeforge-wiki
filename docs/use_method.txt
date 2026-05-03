@@ -1,0 +1,56 @@
+ 운영자 다음 단계 (수동):
+
+  1. vault push:
+  git -C content push origin main
+  2. site push:
+  git push origin plan3/supabase-forum
+  git push origin plan6-final-polish
+  3. 브라우저 manual smoke:
+    - /wiki/graph → 5 노드, 트랜잭션 노드 클릭 → /wiki/data/data-handling/what-is-a-transaction 이동
+    - /wiki/data/data-handling/what-is-a-transaction → 본문 + giscus iframe (env 세팅됨)
+    - /wiki/data/data-handling/what-is-an-n-plus-one → 동일
+    - /wiki/graph 창 리사이즈 → canvas가 viewport 채움 (header strip 고정)
+    - /about → 새 카피 ("AI가 짜준 코드를 한 단계 더 깊게 이해하고 싶을 때...")
+  4. Vault 푸시 후 Vercel 자동 재빌드 동작 확인 (open question §12)
+  5. 사용자 질문 답변 — 콘텐츠 추가 방법: 현 아키텍처에서 vault push 외 경로 없음. spec §7에 베이스라인 답변 정리(admin
+  UI / GitHub API 자동화 / 로컬 watcher 옵션 + 비용 분석). 향후 admin UI 논의 시 spec §7을 출발점으로.
+
+  마스터 스펙 Phase Plan 1-6 종료. 이후는 운영(첫 외부 PR 수신, Q&A 첫 외부 글, 친구 PR merge) 게이트입니다.
+
+
+● 커밋은 두 개 다 완료됐어요. 푸시는 순서가 중요합니다 — 서브모듈 먼저, 그 다음 메인 레포.
+
+  1. vibeforge-wiki 서브모듈 푸시 (먼저)
+
+  cd /d/Education/content
+  git push origin main
+
+  → b18c440 커밋이 Yeounil/vibeforge-wiki 원격의 main에 올라갑니다. 이걸 먼저 안 하면 메인 레포가 가리키는 SHA가 원격에
+  없어서 빌드(Vercel 등)가 깨져요.
+
+  2. 메인 레포 푸시
+
+  지금 브랜치는 plan3/supabase-forum인데 원격 추적 브랜치가 아직 없어요 (no upstream). 첫 푸시는 -u로:
+
+  cd /d/Education
+  git push -u origin plan3/supabase-forum
+
+  이후로는 git push만 치면 됩니다.
+
+  푸시 전에 확인할 것
+
+  메인 레포에 커밋 안 된 파일들이 있어요 (이전부터 있던 거):
+   M .gitignore
+   M components/layout/AppShell.test.tsx
+  ?? CLAUDE.md
+  ?? docs/use_method.txt
+  이번 위키 업로드와는 무관 — 푸시되지 않으니 건드릴 필요 없습니다.
+
+  그 다음
+
+  - 메인 레포는 main 브랜치가 아니라 plan3/supabase-forum 피처 브랜치입니다. 사이트 배포에 반영하려면 GitHub에서
+  main으로 PR 머지 → Vercel 자동 배포.
+  - 또는 push 후 git checkout main && git merge plan3/supabase-forum && git push origin main 로컬 머지도 가능 (이건 머지
+   정책 따라서 결정).
+
+  원격에 인증 안 돼 있으면 gh auth login 또는 GitHub PAT 필요할 수 있어요.

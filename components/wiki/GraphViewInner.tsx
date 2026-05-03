@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   SigmaContainer,
@@ -142,15 +142,44 @@ function InteractionLayer() {
 }
 
 export function GraphViewInner({ data }: { data: GraphData }) {
+  const [isReady, setIsReady] = useState(false);
+  const settleDelay = useMemo(
+    () => layoutCooldownMs(data.nodes.length) + 800,
+    [data.nodes.length]
+  );
+
+  useEffect(() => {
+    const t = setTimeout(() => setIsReady(true), settleDelay);
+    return () => clearTimeout(t);
+  }, [settleDelay]);
+
   return (
-    <SigmaContainer
-      style={{ position: "absolute", inset: 0 }}
-      settings={SIGMA_SETTINGS}
-    >
-      <GraphLoader data={data} />
-      <LayoutDriver nodeCount={data.nodes.length} />
-      <CameraFitter nodeCount={data.nodes.length} />
-      <InteractionLayer />
-    </SigmaContainer>
+    <>
+      <SigmaContainer
+        style={{
+          position: "absolute",
+          inset: 0,
+          opacity: isReady ? 1 : 0,
+          transition: "opacity 400ms ease-out",
+        }}
+        settings={SIGMA_SETTINGS}
+      >
+        <GraphLoader data={data} />
+        <LayoutDriver nodeCount={data.nodes.length} />
+        <CameraFitter nodeCount={data.nodes.length} />
+        <InteractionLayer />
+      </SigmaContainer>
+      {!isReady && (
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center gap-4 pointer-events-none z-10"
+          aria-live="polite"
+        >
+          <div className="w-10 h-10 rounded-full border-2 border-[var(--accent-from)] border-t-transparent animate-spin" />
+          <p className="text-sm text-[var(--text-secondary)]">
+            그래프 정렬 중…
+          </p>
+        </div>
+      )}
+    </>
   );
 }

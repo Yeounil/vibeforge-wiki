@@ -42,6 +42,8 @@ a[data-broken="true"]::after {
   --tw-prose-links: var(--accent-from);
   --tw-prose-bold: var(--text-primary);
   --tw-prose-code: var(--text-primary);
+  --tw-prose-pre-code: var(--text-primary);
+  --tw-prose-pre-bg: rgba(0, 0, 0, 0.04);
   --tw-prose-quotes: var(--text-secondary);
 }
 
@@ -68,10 +70,12 @@ a[data-broken="true"]::after {
   background: rgba(0, 0, 0, 0.04);
   padding: 1em;
   border-radius: 8px;
+  color: var(--text-primary);
 }
 .prose pre code {
   background: transparent;
   padding: 0;
+  color: inherit;
 }
 
 /* Wiki-links — distinct from prose default link color via dotted underline +
