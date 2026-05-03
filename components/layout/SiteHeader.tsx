@@ -4,10 +4,30 @@ import type { Route } from "next";
 import { AuthButton } from "./AuthButton";
 import { Card } from "@/components/ui";
 import { Wordmark } from "@/components/brand/Wordmark";
+import { createClient } from "@/lib/supabase/server";
 
 interface Props { searchSlot?: React.ReactNode; }
 
-export function SiteHeader({ searchSlot }: Props) {
+async function getIsAdmin(): Promise<boolean> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return false;
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+    return profile?.role === "admin";
+  } catch {
+    return false;
+  }
+}
+
+export async function SiteHeader({ searchSlot }: Props) {
+  const isAdmin = await getIsAdmin();
   return (
     <Card className="px-6 md:px-8 py-3 md:py-4 flex items-center gap-5 md:gap-7">
       <div className="flex items-center gap-3">
@@ -50,6 +70,14 @@ export function SiteHeader({ searchSlot }: Props) {
         >
           About
         </Link>
+        {isAdmin && (
+          <Link
+            href={"/admin" as Route}
+            className="hover:text-[var(--ink)] transition-colors"
+          >
+            Admin
+          </Link>
+        )}
       </nav>
 
       {searchSlot && <div className="flex-1 max-w-md">{searchSlot}</div>}
