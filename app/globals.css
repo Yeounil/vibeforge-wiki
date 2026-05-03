@@ -1,6 +1,17 @@
 @import "tailwindcss";
 @import "../lib/design/tokens.css";
 
+/* Override @react-sigma's hardcoded white wrapper bg so graph view follows theme.
+   The library declares --sigma-background-color: #fff at :root and applies
+   `background: var(--sigma-background-color)` to div.react-sigma. Same
+   specificity as our rule below — but the library stylesheet is imported by
+   the graph component and loads after globals.css, so it wins on source order.
+   Prefixing with `html` raises our specificity to (0,0,1,2) which beats the
+   library's (0,0,1,1) rule regardless of load order. */
+html div.react-sigma {
+  background: var(--canvas);
+}
+
 html, body {
   font-family: var(--font-sans);
   color: var(--ink);
@@ -36,7 +47,7 @@ a[data-broken="true"]::after {
   --tw-prose-bold: var(--ink);
   --tw-prose-code: var(--ink);
   --tw-prose-pre-code: var(--ink);
-  --tw-prose-pre-bg: rgba(0, 0, 0, 0.04);
+  --tw-prose-pre-bg: var(--surface-soft);
   --tw-prose-quotes: var(--ink-muted);
 }
 
@@ -45,30 +56,117 @@ a[data-broken="true"]::after {
   border-collapse: collapse;
   border-radius: 8px;
   overflow: hidden;
+  border: 1px solid var(--hairline);
 }
-.prose thead { background: rgba(124, 58, 237, 0.06); }
+.prose thead {
+  background: var(--surface-soft);
+  border-bottom: 1px solid var(--hairline);
+}
 .prose th,
 .prose td {
   padding: 0.5em 0.75em;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid var(--hairline);
+}
+.prose tbody tr:last-child th,
+.prose tbody tr:last-child td {
+  border-bottom: none;
 }
 
-/* Inline + fenced code — light gray boxes, no syntax highlighting */
+/* Inline + fenced code — token-driven so they remain visible in dark mode */
 .prose code {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--surface-soft);
+  border: 1px solid var(--hairline);
   padding: 0.1em 0.3em;
   border-radius: 4px;
 }
 .prose pre {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--surface-soft);
+  border: 1px solid var(--hairline);
   padding: 1em;
   border-radius: 8px;
   color: var(--ink);
 }
 .prose pre code {
   background: transparent;
+  border: none;
   padding: 0;
   color: inherit;
+}
+
+/* Hero / landing CTAs — each button uses a distinctly different emphasis
+   approach in light vs dark mode. Light leans into Figma's editorial
+   black-and-white pair; dark leans into our purple/blue brand identity. */
+.btn-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--r-pill);
+  padding: 0.8rem 1.85rem;
+  font-weight: 480;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 200ms ease, box-shadow 220ms ease,
+    background 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+.btn-hero .btn-arrow {
+  display: inline-block;
+  transition: transform 220ms ease;
+}
+.btn-hero:hover .btn-arrow {
+  transform: translateX(3px);
+}
+.btn-hero:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--canvas), 0 0 0 5px var(--brand-from);
+}
+
+/* Primary CTA — light: ink-black pill (editorial). dark: brand-gradient w/ glow. */
+.btn-hero-primary {
+  background: var(--ink);
+  color: var(--canvas);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.14);
+}
+.btn-hero-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.20);
+}
+@media (prefers-color-scheme: dark) {
+  .btn-hero-primary {
+    background: var(--brand-gradient);
+    color: #ffffff;
+    box-shadow: 0 4px 22px rgba(124, 58, 237, 0.42);
+  }
+  .btn-hero-primary:hover {
+    box-shadow: 0 10px 36px rgba(124, 58, 237, 0.58);
+  }
+}
+
+/* Secondary CTA — light: bold ink-stroked white pill. dark: hairline ghost. */
+.btn-hero-secondary {
+  background: var(--canvas);
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+}
+.btn-hero-secondary:hover {
+  background: var(--ink);
+  color: var(--canvas);
+  transform: translateY(-1px);
+}
+@media (prefers-color-scheme: dark) {
+  .btn-hero-secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--hairline);
+  }
+  .btn-hero-secondary:hover {
+    background: var(--surface-soft);
+    border-color: var(--ink);
+    color: var(--ink);
+  }
 }
 
 /* Wiki-links — distinct from prose default link color via dotted underline +
@@ -85,6 +183,6 @@ a[data-broken="true"]::after {
   text-decoration-thickness: 1.5px;
 }
 .prose a[data-wiki-target]:not([data-broken="true"]):hover {
-  background: rgba(124, 58, 237, 0.08);
+  background: color-mix(in srgb, var(--brand-from) 12%, transparent);
   border-radius: 3px;
 }

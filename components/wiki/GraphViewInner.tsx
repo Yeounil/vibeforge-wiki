@@ -28,7 +28,7 @@ function readDesignTokens() {
     return v || fallback;
   };
   return {
-    edge:        get("--hairline",    "#e5e7eb"),
+    edge:        get("--graph-edge",  "#cbd5e1"),
     label:       get("--ink",         "#1f2937"),
     canvas:      get("--canvas",      "#ffffff"),
     nodeFallback: get("--ink-muted",  "#9ca3af"),
@@ -37,16 +37,90 @@ function readDesignTokens() {
   };
 }
 
+// The default hover pill is white; in dark mode our labelColor (--ink) is also
+// near-white, so the hovered node's text becomes invisible. Mirror sigma's
+// drawDiscNodeHover but pin the label text to a dark color so it stays
+// readable against the white pill in both themes.
+const HOVER_LABEL_COLOR = "#0f172a";
+
+type HoverData = {
+  x: number;
+  y: number;
+  size: number;
+  label: string | null;
+};
+type HoverSettings = {
+  labelSize: number;
+  labelFont: string;
+  labelWeight: string;
+};
+
+function drawNodeHoverWithDarkLabel(
+  context: CanvasRenderingContext2D,
+  data: HoverData,
+  settings: HoverSettings,
+) {
+  const { labelSize: size, labelFont: font, labelWeight: weight } = settings;
+  context.font = `${weight} ${size}px ${font}`;
+
+  context.fillStyle = "#FFF";
+  context.shadowOffsetX = 0;
+  context.shadowOffsetY = 0;
+  context.shadowBlur = 8;
+  context.shadowColor = "#000";
+
+  const PADDING = 2;
+  if (typeof data.label === "string") {
+    const textWidth = context.measureText(data.label).width;
+    const boxWidth = Math.round(textWidth + 5);
+    const boxHeight = Math.round(size + 2 * PADDING);
+    const radius = Math.max(data.size, size / 2) + PADDING;
+    const angleRadian = Math.asin(boxHeight / 2 / radius);
+    const xDeltaCoord = Math.sqrt(
+      Math.abs(Math.pow(radius, 2) - Math.pow(boxHeight / 2, 2)),
+    );
+    context.beginPath();
+    context.moveTo(data.x + xDeltaCoord, data.y + boxHeight / 2);
+    context.lineTo(data.x + radius + boxWidth, data.y + boxHeight / 2);
+    context.lineTo(data.x + radius + boxWidth, data.y - boxHeight / 2);
+    context.lineTo(data.x + xDeltaCoord, data.y - boxHeight / 2);
+    context.arc(data.x, data.y, radius, angleRadian, -angleRadian);
+    context.closePath();
+    context.fill();
+  } else {
+    context.beginPath();
+    context.arc(data.x, data.y, data.size + PADDING, 0, Math.PI * 2);
+    context.closePath();
+    context.fill();
+  }
+  context.shadowOffsetX = 0;
+  context.shadowOffsetY = 0;
+  context.shadowBlur = 0;
+
+  if (data.label) {
+    context.fillStyle = HOVER_LABEL_COLOR;
+    context.font = `${weight} ${size}px ${font}`;
+    context.fillText(data.label, data.x + data.size + 3, data.y + size / 3);
+  }
+}
+
 function makeSigmaSettings() {
   const tokens = readDesignTokens();
   return {
     labelFont: tokens.font,
     labelColor: { color: tokens.label },
     labelSize: 13,
-    labelWeight: "500",
-    labelRenderedSizeThreshold: 12,
-    labelDensity: 0.05,
-    labelGridCellSize: 150,
+    labelWeight: "600",
+    defaultDrawNodeHover: drawNodeHoverWithDarkLabel,
+    // Sigma renders Math.ceil(labelDensity / cameraRatio²) labels per
+    // (labelGridCellSize × labelGridCellSize) cell, then drops any whose
+    // scaled size < labelRenderedSizeThreshold. With density=5 cellSize=90
+    // threshold=5, the default-fit camera (ratio≈1.5) shows ~3 labels per
+    // cell, and a modest 1.5× zoom-in already saturates the grid so labels
+    // come into view well before the user has to zoom in hard.
+    labelRenderedSizeThreshold: 5,
+    labelDensity: 5,
+    labelGridCellSize: 90,
     defaultNodeColor: tokens.nodeFallback,
     defaultEdgeColor: tokens.edge,
     renderEdgeLabels: false,
@@ -133,12 +207,22 @@ function InteractionLayer() {
 
   const registerEvents = useRegisterEvents();
   useEffect(() => {
+    const container = sigma.getContainer();
     registerEvents({
-      enterNode: (e: { node: string }) => setHoveredNode(e.node),
-      leaveNode: () => setHoveredNode(null),
+      enterNode: (e: { node: string }) => {
+        setHoveredNode(e.node);
+        container.style.cursor = "pointer";
+      },
+      leaveNode: () => {
+        setHoveredNode(null);
+        container.style.cursor = "";
+      },
       clickNode: (e: { node: string }) => router.push(`/wiki/${e.node}`),
     });
-  }, [registerEvents, router]);
+    return () => {
+      container.style.cursor = "";
+    };
+  }, [registerEvents, router, sigma]);
 
   useEffect(() => {
     const graph = sigma.getGraph();

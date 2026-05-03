@@ -3,20 +3,55 @@ import Link from "next/link";
 import type { Route } from "next";
 import { AuthButton } from "./AuthButton";
 import { Card } from "@/components/ui";
+import { Wordmark } from "@/components/brand/Wordmark";
 
 interface Props { searchSlot?: React.ReactNode; }
 
 export function SiteHeader({ searchSlot }: Props) {
   return (
-    <Card className="!p-0 px-6 py-4 flex items-center gap-6">
-      <Link href="/" className="font-bold text-lg text-[var(--ink)]">
-        VibeForge
-      </Link>
-      <nav className="flex gap-4 text-sm text-[var(--ink-muted)]">
-        <Link href="/wiki" className="hover:text-[var(--ink)]">Wiki</Link>
-        <Link href={"/forum" as Route} className="hover:text-[var(--ink)]">Forum</Link>
-        <Link href={"/about" as Route} className="hover:text-[var(--ink)]">About</Link>
+    <Card className="px-6 md:px-8 py-3 md:py-4 flex items-center gap-5 md:gap-7">
+      <div className="flex items-center gap-3">
+        <Link
+          href="/"
+          aria-label="VibeForge"
+          className="text-[var(--ink)] hover:opacity-90 transition-opacity"
+        >
+          <Wordmark size="header" />
+        </Link>
+        <span
+          aria-hidden="true"
+          className="hidden lg:inline font-mono uppercase text-[12px] tracking-[0.22em] text-[var(--ink-muted)]"
+        >
+          CS · 위키 · 포럼
+        </span>
+      </div>
+
+      <span
+        aria-hidden="true"
+        className="hidden md:block h-6 w-px bg-[var(--hairline)]"
+      />
+
+      <nav
+        aria-label="Primary"
+        className="flex gap-5 text-[15px] text-[var(--ink-muted)]"
+      >
+        <Link href="/wiki" className="hover:text-[var(--ink)] transition-colors">
+          Wiki
+        </Link>
+        <Link
+          href={"/forum" as Route}
+          className="hover:text-[var(--ink)] transition-colors"
+        >
+          Forum
+        </Link>
+        <Link
+          href={"/about" as Route}
+          className="hover:text-[var(--ink)] transition-colors"
+        >
+          About
+        </Link>
       </nav>
+
       {searchSlot && <div className="flex-1 max-w-md">{searchSlot}</div>}
       <div className={searchSlot ? "" : "ml-auto"}>
         <AuthButton />

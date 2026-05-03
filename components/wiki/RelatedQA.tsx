@@ -11,7 +11,7 @@ interface Props {
 
 export function RelatedQA({ posts }: Props) {
   return (
-    <ColorBlock variant="mint" className="mt-8">
+    <ColorBlock variant="mint" padding="lg" className="mt-8">
       <Eyebrow>RELATED Q&amp;A</Eyebrow>
       <h2 className="text-xl font-medium mt-2 mb-4">관련 질문</h2>
       {posts.length === 0 ? (

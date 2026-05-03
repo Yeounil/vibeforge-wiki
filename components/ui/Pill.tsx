@@ -18,7 +18,7 @@ type PillProps =
   | (CommonProps & ButtonHTMLAttributes<HTMLButtonElement> & { href?: undefined });
 
 const variantClass: Record<PillVariant, string> = {
-  primary:   "bg-[var(--brand-gradient)] text-white",
+  primary:   "bg-[image:var(--brand-gradient)] text-white",
   secondary: "bg-[var(--canvas)] text-[var(--ink)] border border-[var(--hairline)]",
   magenta:   "bg-[var(--accent-magenta)] text-white",
 };

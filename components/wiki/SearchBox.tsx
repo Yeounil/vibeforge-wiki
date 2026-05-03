@@ -50,7 +50,7 @@ export function SearchBox() {
         placeholder="위키 검색…"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="w-full bg-white/70 backdrop-blur rounded-full px-4 py-2 text-sm border border-black/5 focus:outline-none focus:ring-2 focus:ring-[var(--brand-from)]/30"
+        className="w-full bg-[var(--canvas)] text-[var(--ink)] placeholder:text-[var(--ink-muted)] backdrop-blur rounded-full px-4 py-2 text-sm border border-[var(--hairline)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-from)]/40"
         aria-label="Search wiki"
       />
       {loading && (
@@ -59,9 +59,9 @@ export function SearchBox() {
         </p>
       )}
       {hits.length > 0 && (
-        <ul className="absolute z-10 mt-1 w-full bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] divide-y divide-black/5 max-h-80 overflow-auto">
+        <ul className="absolute z-10 mt-1 w-full bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] divide-y divide-[var(--hairline)] max-h-80 overflow-auto shadow-lg">
           {hits.map((h) => (
-            <li key={h.slug} className="p-3 hover:bg-black/5">
+            <li key={h.slug} className="p-3 hover:bg-[var(--surface-soft)]">
               <Link
                 href={`/wiki/${h.slug}` as Route}
                 className="text-[var(--ink)] font-medium"

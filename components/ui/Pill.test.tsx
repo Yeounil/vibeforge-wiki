@@ -8,7 +8,7 @@ describe("Pill", () => {
     render(<Pill>Submit</Pill>);
     const btn = screen.getByRole("button", { name: "Submit" });
     expect(btn.tagName).toBe("BUTTON");
-    expect(btn.className).toContain("bg-[var(--brand-gradient)]");
+    expect(btn.className).toContain("bg-[image:var(--brand-gradient)]");
   });
 
   it("renders an anchor when href is provided", () => {

@@ -23,4 +23,18 @@ describe("TableOfContents", () => {
     const { container } = render(<TableOfContents bodyHtml="<p>no headings</p>" />);
     expect(container.firstChild).toBeNull();
   });
+
+  it("decodes HTML entities in heading text", () => {
+    const html = `
+      <h2 id="amp">특징 추출 &#x26; 변환</h2>
+      <h2 id="named">A &amp; B</h2>
+      <h2 id="dec">x &#38; y</h2>
+      <h2 id="quote">&quot;hi&quot;</h2>
+    `;
+    render(<TableOfContents bodyHtml={html} />);
+    expect(screen.getByRole("link", { name: "특징 추출 & 변환" })).toHaveAttribute("href", "#amp");
+    expect(screen.getByRole("link", { name: "A & B" })).toHaveAttribute("href", "#named");
+    expect(screen.getByRole("link", { name: "x & y" })).toHaveAttribute("href", "#dec");
+    expect(screen.getByRole("link", { name: '"hi"' })).toHaveAttribute("href", "#quote");
+  });
 });

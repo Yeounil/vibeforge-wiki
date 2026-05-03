@@ -83,6 +83,10 @@
   --cat-people:   #f59e0b;
   --cat-sources:  #f43f5e;
   --cat-default:  #f97316;
+
+  /* Graph view (Sigma) — distinct from --hairline because graph edges need
+     more contrast than 1px UI borders. */
+  --graph-edge: #cbd5e1;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -107,6 +111,8 @@
     --overlay-scrim:    rgba(0,0,0,0.75);
 
     --bg-gradient: linear-gradient(135deg, #1a1325 0%, #2a1622 100%);
+
+    --graph-edge: rgba(255, 255, 255, 0.22);
   }
 }
 
