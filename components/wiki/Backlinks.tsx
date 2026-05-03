@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Route } from "next";
+import { ColorBlock, Eyebrow } from "@/components/ui";
 
 interface Props {
   slugs: string[];
@@ -9,11 +10,10 @@ interface Props {
 export function Backlinks({ slugs, titleMap }: Props) {
   if (slugs.length === 0) return null;
   return (
-    <nav aria-label="Backlinks" className="text-sm">
-      <h2 className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)] mb-2">
-        이 페이지를 인용한 곳
-      </h2>
-      <ul className="space-y-1">
+    <ColorBlock variant="lilac" className="mt-8" aria-label="Backlinks">
+      <Eyebrow>BACKLINKS</Eyebrow>
+      <h2 className="text-xl font-medium mt-2 mb-4">이 페이지를 인용한 글</h2>
+      <ul className="space-y-2">
         {slugs.map((slug) => (
           <li key={slug}>
             <Link
@@ -25,6 +25,6 @@ export function Backlinks({ slugs, titleMap }: Props) {
           </li>
         ))}
       </ul>
-    </nav>
+    </ColorBlock>
   );
 }

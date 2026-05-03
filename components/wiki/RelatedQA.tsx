@@ -2,6 +2,7 @@
 // wiki page. Server-rendered card following the Backlinks pattern.
 import Link from "next/link";
 import { CategoryBadge } from "@/components/forum/CategoryBadge";
+import { ColorBlock, Eyebrow } from "@/components/ui";
 import type { RelatedPost } from "@/lib/wiki-qa/queries";
 
 interface Props {
@@ -10,10 +11,9 @@ interface Props {
 
 export function RelatedQA({ posts }: Props) {
   return (
-    <section aria-label="Related discussions" className="text-sm">
-      <h2 className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)] mb-2">
-        관련 토론
-      </h2>
+    <ColorBlock variant="mint" className="mt-8">
+      <Eyebrow>RELATED Q&amp;A</Eyebrow>
+      <h2 className="text-xl font-medium mt-2 mb-4">관련 질문</h2>
       {posts.length === 0 ? (
         <p className="text-[var(--text-secondary)]">
           이 페이지를 인용한 토론이 아직 없어요.{" "}
@@ -45,6 +45,6 @@ export function RelatedQA({ posts }: Props) {
           })}
         </ul>
       )}
-    </section>
+    </ColorBlock>
   );
 }
