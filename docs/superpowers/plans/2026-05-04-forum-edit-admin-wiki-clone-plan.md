@@ -67,7 +67,7 @@ Create `supabase/migrations/0005_admin_and_metadata.sql`:
 
 alter table public.profiles
   add column promoted_at timestamptz,
-  add column promoted_by uuid references auth.users(id);
+  add column promoted_by uuid references auth.users(id) on delete set null;
 
 create or replace function public.touch_updated_at()
 returns trigger
@@ -79,10 +79,12 @@ begin
 end;
 $$;
 
+drop trigger if exists posts_touch_updated on public.posts;
 create trigger posts_touch_updated
   before update on public.posts
   for each row execute function public.touch_updated_at();
 
+drop trigger if exists comments_touch_updated on public.comments;
 create trigger comments_touch_updated
   before update on public.comments
   for each row execute function public.touch_updated_at();
