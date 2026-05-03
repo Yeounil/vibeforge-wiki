@@ -18,28 +18,49 @@ import { clampNodeSize, computeDegrees } from "@/lib/wiki/graph-render";
 
 const layoutCooldownMs = (n: number) => Math.min(4000 + n * 10, 8000);
 
-const SIGMA_SETTINGS = {
-  labelFont: "Pretendard, system-ui, sans-serif",
-  labelColor: { color: "#374151" },
-  labelSize: 13,
-  labelWeight: "500",
-  labelRenderedSizeThreshold: 12,
-  labelDensity: 0.05,
-  labelGridCellSize: 150,
-  defaultNodeColor: "#9ca3af",
-  defaultEdgeColor: "rgba(0,0,0,0.08)",
-  renderEdgeLabels: false,
-  zIndex: true,
-  allowInvalidContainer: true,
-};
+function readDesignTokens() {
+  if (typeof window === "undefined") {
+    return { edge: "#e5e7eb", label: "#1f2937", canvas: "#ffffff", nodeFallback: "#9ca3af", hoverEdge: "#7c3aed" };
+  }
+  const cs = getComputedStyle(document.documentElement);
+  const get = (name: string, fallback: string) => {
+    const v = cs.getPropertyValue(name).trim();
+    return v || fallback;
+  };
+  return {
+    edge:        get("--hairline",    "#e5e7eb"),
+    label:       get("--ink",         "#1f2937"),
+    canvas:      get("--canvas",      "#ffffff"),
+    nodeFallback: get("--ink-muted",  "#9ca3af"),
+    hoverEdge:   get("--brand-from",  "#7c3aed"),
+  };
+}
+
+function makeSigmaSettings() {
+  const tokens = readDesignTokens();
+  return {
+    labelFont: "Pretendard, system-ui, sans-serif",
+    labelColor: { color: tokens.label },
+    labelSize: 13,
+    labelWeight: "500",
+    labelRenderedSizeThreshold: 12,
+    labelDensity: 0.05,
+    labelGridCellSize: 150,
+    defaultNodeColor: tokens.nodeFallback,
+    defaultEdgeColor: tokens.edge,
+    renderEdgeLabels: false,
+    zIndex: true,
+    allowInvalidContainer: true,
+  };
+}
 
 function resolveColor(group: string): string {
-  if (typeof window === "undefined") return "#9ca3af";
+  if (typeof window === "undefined") return readDesignTokens().nodeFallback;
   const meta = getCategoryMeta(group);
   const computed = getComputedStyle(document.documentElement)
     .getPropertyValue(meta.colorVar)
     .trim();
-  return computed || "#9ca3af";
+  return computed || readDesignTokens().nodeFallback;
 }
 
 function GraphLoader({ data }: { data: GraphData }) {
@@ -64,7 +85,7 @@ function GraphLoader({ data }: { data: GraphData }) {
         graph.hasNode(e.target) &&
         !graph.hasEdge(e.source, e.target)
       ) {
-        graph.addEdge(e.source, e.target, { size: 0.6, color: "rgba(0,0,0,0.08)" });
+        graph.addEdge(e.source, e.target, { size: 0.6, color: readDesignTokens().edge });
       }
     }
     loadGraph(graph);
@@ -120,6 +141,7 @@ function InteractionLayer() {
 
   useEffect(() => {
     const graph = sigma.getGraph();
+    const tokens = readDesignTokens();
     sigma.setSetting("nodeReducer", (node, attrs) => {
       if (!hoveredNode) return attrs;
       if (node === hoveredNode || graph.areNeighbors(hoveredNode, node)) {
@@ -131,7 +153,7 @@ function InteractionLayer() {
       if (!hoveredNode) return attrs;
       const ext = graph.extremities(edge);
       if (ext.includes(hoveredNode)) {
-        return { ...attrs, color: "#7c3aed", size: 1.2 };
+        return { ...attrs, color: tokens.hoverEdge, size: 1.2 };
       }
       return { ...attrs, hidden: true };
     });
@@ -143,6 +165,7 @@ function InteractionLayer() {
 
 export function GraphViewInner({ data }: { data: GraphData }) {
   const [isReady, setIsReady] = useState(false);
+  const [themeRev, setThemeRev] = useState(0);
   const settleDelay = useMemo(
     () => layoutCooldownMs(data.nodes.length) + 800,
     [data.nodes.length]
@@ -153,16 +176,35 @@ export function GraphViewInner({ data }: { data: GraphData }) {
     return () => clearTimeout(t);
   }, [settleDelay]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    const handler = () => {
+      setIsReady(false);
+      setThemeRev((r) => r + 1);
+    };
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+
+  // Re-arm the isReady timer whenever themeRev bumps (SigmaContainer remounts)
+  useEffect(() => {
+    if (themeRev === 0) return;
+    const t = setTimeout(() => setIsReady(true), settleDelay);
+    return () => clearTimeout(t);
+  }, [themeRev, settleDelay]);
+
   return (
     <>
       <SigmaContainer
+        key={themeRev}
         style={{
           position: "absolute",
           inset: 0,
           opacity: isReady ? 1 : 0,
           transition: "opacity 400ms ease-out",
         }}
-        settings={SIGMA_SETTINGS}
+        settings={makeSigmaSettings()}
       >
         <GraphLoader data={data} />
         <LayoutDriver nodeCount={data.nodes.length} />
