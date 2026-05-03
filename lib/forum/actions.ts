@@ -180,8 +180,13 @@ export async function deletePostAction(id: string): Promise<ActionResult> {
     console.error("[wiki-qa pre-delete read failed]", e);
   }
 
-  const { error } = await supabase.from("posts").delete().eq("id", id);
+  const { data: deleted, error } = await supabase
+    .from("posts")
+    .delete()
+    .eq("id", id)
+    .select("id");
   if (error) return { ok: false, error: error.message };
+  if (!deleted || deleted.length === 0) return { ok: false, error: "권한이 없거나 글을 찾을 수 없어요." };
 
   for (const slug of slugs) revalidatePath(`/wiki/${slug}`);
   if (post?.category) revalidatePath(`/forum/${post.category}`);
@@ -213,6 +218,7 @@ export async function updateCommentAction(formData: FormData): Promise<ActionRes
     .single();
   if (error || !updated) return { ok: false, error: error?.message ?? "수정에 실패했어요." };
 
+  // Comment edits don't affect category/landing pages — those don't render comment bodies.
   revalidatePath(`/forum/post/${updated.post_id}`);
   return { ok: true };
 }
@@ -230,8 +236,13 @@ export async function deleteCommentAction(
   } = await supabase.auth.getUser();
   if (!user) return { ok: false, error: "로그인이 필요합니다." };
 
-  const { error } = await supabase.from("comments").delete().eq("id", id);
+  const { data: deleted, error } = await supabase
+    .from("comments")
+    .delete()
+    .eq("id", id)
+    .select("id");
   if (error) return { ok: false, error: error.message };
+  if (!deleted || deleted.length === 0) return { ok: false, error: "권한이 없거나 댓글을 찾을 수 없어요." };
 
   revalidatePath(`/forum/post/${postId}`);
   return { ok: true };

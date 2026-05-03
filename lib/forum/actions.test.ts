@@ -77,7 +77,7 @@ describe("updatePostAction", () => {
       select: () => ({
         eq: () => ({
           single: vi.fn().mockResolvedValue({
-            data: { id: "p1", body_md: "old" },
+            data: { category: "qa", body_md: "old" },
             error: null,
           }),
         }),
