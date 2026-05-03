@@ -12,7 +12,7 @@ interface Props {
 export function RelatedWiki({ slugs, titleMap }: Props) {
   return (
     <section aria-label="Referenced wiki pages" className="text-sm">
-      <h2 className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)] mb-2">
+      <h2 className="text-xs font-semibold uppercase tracking-wide text-[var(--ink-muted)] mb-2">
         이 글이 인용한 위키
       </h2>
       <ul className="space-y-1">
@@ -24,7 +24,7 @@ export function RelatedWiki({ slugs, titleMap }: Props) {
             />
             <Link
               href={`/wiki/${slug}` as Route}
-              className="text-[var(--text-primary)] hover:underline"
+              className="text-[var(--ink)] hover:underline"
             >
               {titleMap[slug] ?? slug}
             </Link>

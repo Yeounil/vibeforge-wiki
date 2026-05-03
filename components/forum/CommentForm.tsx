@@ -3,6 +3,7 @@
 
 import { useState, useTransition, useRef } from "react";
 import { createCommentAction } from "@/lib/forum/actions";
+import { Pill } from "@/components/ui";
 
 interface Props {
   postId: string;
@@ -36,17 +37,12 @@ export function CommentForm({ postId }: Props) {
         rows={3}
         maxLength={5000}
         placeholder="댓글을 입력하세요…"
-        className="w-full rounded-md border border-black/10 px-3 py-2 text-sm"
+        className="w-full bg-[var(--canvas)] text-[var(--ink)] border border-[var(--hairline)] rounded-[var(--r-md)] px-[var(--s-sm)] py-[var(--s-xs)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-from)] focus:border-transparent text-sm"
       />
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <button
-        type="submit"
-        disabled={isPending}
-        className="px-4 py-1.5 rounded-full text-sm font-semibold text-white shadow-sm hover:opacity-90 disabled:opacity-50"
-        style={{ background: "var(--accent-cta)" }}
-      >
+      <Pill type="submit" variant="primary" size="sm" disabled={isPending} className="disabled:opacity-50">
         {isPending ? "올리는 중…" : "댓글 달기"}
-      </button>
+      </Pill>
     </form>
   );
 }
