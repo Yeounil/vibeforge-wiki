@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { Route } from "next";
+import type { UrlObject } from "url";
 
 type PillVariant = "primary" | "secondary" | "magenta";
 type PillSize = "default" | "sm";
@@ -12,7 +14,7 @@ interface CommonProps {
 }
 
 type PillProps =
-  | (CommonProps & { href: string; onClick?: never })
+  | (CommonProps & { href: Route | UrlObject; onClick?: never })
   | (CommonProps & ButtonHTMLAttributes<HTMLButtonElement> & { href?: undefined });
 
 const variantClass: Record<PillVariant, string> = {
