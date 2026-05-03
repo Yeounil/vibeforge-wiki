@@ -1,41 +1,135 @@
-/* lib/design/tokens.css — VibeForge design tokens (Plan 2). */
-
-@font-face {
-  font-family: "Pretendard";
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  src: url("/fonts/Pretendard-Regular.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Pretendard";
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-  src: url("/fonts/Pretendard-SemiBold.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Pretendard";
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-  src: url("/fonts/Pretendard-Bold.woff2") format("woff2");
-}
+/* lib/design/tokens.css — VibeForge Figma design system tokens. */
 
 :root {
-  --bg-gradient: linear-gradient(135deg, #f3e7fb 0%, #fde7f3 100%);
-  --surface-card: #ffffff;
-  --surface-shadow: 0 4px 24px rgba(124, 58, 237, 0.08);
-  --accent-from: #7c3aed;
-  --accent-to: #3b82f6;
-  --accent-cta: linear-gradient(135deg, #7c3aed, #3b82f6);
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --radius-card: 14px;
+  /* === Brand (purple/pink — current accent preserved) === */
+  --brand-from: #7c3aed;
+  --brand-to:   #3b82f6;
+  --brand-gradient: linear-gradient(135deg, var(--brand-from), var(--brand-to));
+  --accent-magenta: #ec4899;
 
+  /* === Surface === */
+  --canvas:        #ffffff;
+  --surface-soft:  #f9fafb;
+  --hairline:      #e5e7eb;
+  --hairline-soft: #f3f4f6;
+
+  /* === Ink === */
+  --ink:         #1f2937;
+  --ink-inverse: #ffffff;
+  --ink-muted:   #6b7280;
+
+  /* === Color blocks (light) === */
+  --block-lilac: #ede9fe;
+  --block-mint:  #d1fae5;
+  --block-cream: #fef3c7;
+  --block-pink:  #fce7f3;
+  --block-navy:  #1e1b4b;
+
+  /* === Semantic === */
+  --semantic-success: #10b981;
+  --overlay-scrim:    rgba(0,0,0,0.6);
+
+  /* === Page background gradient (current site identity) === */
+  --bg-gradient: linear-gradient(135deg, #f3e7fb 0%, #fde7f3 100%);
+
+  /* === Spacing (8px base) === */
+  --s-hair:    1px;
+  --s-xxs:     4px;
+  --s-xs:      8px;
+  --s-sm:      12px;
+  --s-md:      16px;
+  --s-lg:      24px;
+  --s-xl:      32px;
+  --s-xxl:     48px;
+  --s-section: 96px;
+
+  /* === Radius === */
+  --r-xs:   2px;
+  --r-sm:   6px;
+  --r-md:   8px;
+  --r-lg:   24px;
+  --r-xl:   32px;
+  --r-pill: 50px;
+  --r-full: 9999px;
+
+  /* === Font weight === */
+  --w-thin:     320;
+  --w-light:    330;
+  --w-regular:  340;
+  --w-medium:   480;
+  --w-semibold: 540;
+  --w-bold:     700;
+
+  /* === Font stack — Geist + Pretendard via next/font (loaded in app/layout.tsx) === */
+  --font-sans: var(--font-geist), var(--font-pretendard), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "JetBrains Mono", "SF Mono", monospace;
+
+  /* === Legacy aliases — TODO remove in PR 5 cleanup === */
+  --surface-card:    var(--canvas);
+  --surface-shadow:  0 4px 24px rgba(124, 58, 237, 0.08);
+  --text-primary:    var(--ink);
+  --text-secondary:  var(--ink-muted);
+  --accent-from:     var(--brand-from);
+  --accent-to:       var(--brand-to);
+  --accent-cta:      var(--brand-gradient);
+  --radius-card:     var(--r-md);
+
+  /* Category colors — keep existing */
   --cat-concepts: #3b82f6;
   --cat-entities: #ec4899;
-  --cat-people: #f59e0b;
-  --cat-sources: #f43f5e;
-  --cat-default: #f97316;
+  --cat-people:   #f59e0b;
+  --cat-sources:  #f43f5e;
+  --cat-default:  #f97316;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas:        #14111e;
+    --surface-soft:  #1c1828;
+    --hairline:      rgba(255,255,255,0.08);
+    --hairline-soft: rgba(255,255,255,0.04);
+
+    --ink:         #ede8f5;
+    --ink-inverse: #14111e;
+    --ink-muted:   #9ca3af;
+
+    --block-lilac: #3b2360;
+    --block-mint:  #1f3d3a;
+    --block-cream: #3d3520;
+    --block-pink:  #4a1d3f;
+    --block-navy:  #14111e;
+
+    --semantic-success: #34d399;
+    --overlay-scrim:    rgba(0,0,0,0.75);
+
+    --bg-gradient: linear-gradient(135deg, #1a1325 0%, #2a1622 100%);
+
+    /* Legacy alias overrides */
+    --surface-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* === Tailwind 4 @theme — exposes tokens as utilities === */
+@theme {
+  --color-canvas:       var(--canvas);
+  --color-surface-soft: var(--surface-soft);
+  --color-hairline:     var(--hairline);
+  --color-ink:          var(--ink);
+  --color-ink-inverse:  var(--ink-inverse);
+  --color-ink-muted:    var(--ink-muted);
+  --color-block-lilac:  var(--block-lilac);
+  --color-block-mint:   var(--block-mint);
+  --color-block-cream:  var(--block-cream);
+  --color-block-pink:   var(--block-pink);
+  --color-block-navy:   var(--block-navy);
+  --color-brand-from:   var(--brand-from);
+  --color-brand-to:     var(--brand-to);
+  --color-magenta:      var(--accent-magenta);
+
+  --radius-pill: var(--r-pill);
+  --radius-lg:   var(--r-lg);
+  --radius-md:   var(--r-md);
+
+  --font-sans:  var(--font-sans);
+  --font-mono:  var(--font-mono);
 }
