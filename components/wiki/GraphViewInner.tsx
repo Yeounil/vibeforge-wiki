@@ -20,7 +20,7 @@ const layoutCooldownMs = (n: number) => Math.min(4000 + n * 10, 8000);
 
 function readDesignTokens() {
   if (typeof window === "undefined") {
-    return { edge: "#e5e7eb", label: "#1f2937", canvas: "#ffffff", nodeFallback: "#9ca3af", hoverEdge: "#7c3aed" };
+    return { edge: "#e5e7eb", label: "#1f2937", canvas: "#ffffff", nodeFallback: "#9ca3af", hoverEdge: "#7c3aed", font: "system-ui, sans-serif" };
   }
   const cs = getComputedStyle(document.documentElement);
   const get = (name: string, fallback: string) => {
@@ -33,13 +33,14 @@ function readDesignTokens() {
     canvas:      get("--canvas",      "#ffffff"),
     nodeFallback: get("--ink-muted",  "#9ca3af"),
     hoverEdge:   get("--brand-from",  "#7c3aed"),
+    font:        get("--font-sans",   "system-ui, sans-serif"),
   };
 }
 
 function makeSigmaSettings() {
   const tokens = readDesignTokens();
   return {
-    labelFont: "Pretendard, system-ui, sans-serif",
+    labelFont: tokens.font,
     labelColor: { color: tokens.label },
     labelSize: 13,
     labelWeight: "500",
