@@ -6,7 +6,6 @@ tags: [knowledge-management, llm-agents, second-brain, wiki]
 created: 2026-04-18
 updated: 2026-04-18
 source_type: article
-source_path: raw/misc/llm-wiki-manifesto.md
 authors: unknown
 aliases: [LLM Wiki Manifesto]
 ---
