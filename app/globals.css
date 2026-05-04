@@ -93,6 +93,23 @@ a[data-broken="true"]::after {
   color: inherit;
 }
 
+/* Mobile-responsive prose elements. Tables become horizontally scrollable
+   instead of pushing the viewport; images respect container width; long
+   <pre> code overflows internally instead of breaking layout. */
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.prose pre {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.prose img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Hero / landing CTAs — each button uses a distinctly different emphasis
    approach in light vs dark mode. Light leans into Figma's editorial
    black-and-white pair; dark leans into our purple/blue brand identity. */

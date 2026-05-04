@@ -1,5 +1,6 @@
 // components/layout/AppShell.tsx
 import { SiteHeader } from "./SiteHeader";
+import { BottomTabBar } from "./BottomTabBar";
 
 interface Props {
   sidebar: React.ReactNode;
@@ -10,23 +11,18 @@ interface Props {
 
 export function AppShell({ sidebar, main, right, headerSearch }: Props) {
   return (
-    <div className="min-h-screen p-4 md:p-6">
+    <div className="min-h-screen p-4 md:p-6 pb-[calc(64px+env(safe-area-inset-bottom))] lg:pb-6">
       <SiteHeader searchSlot={headerSearch} />
 
-      <details className="mt-4 md:hidden bg-[var(--canvas)] rounded-[var(--r-md)] border border-[var(--hairline)]">
-        <summary className="px-4 py-3 cursor-pointer text-sm font-semibold">
-          카테고리
-        </summary>
-        <div className="px-2 pb-3">{sidebar}</div>
-      </details>
-
-      <div className="mt-6 grid gap-6 grid-cols-1 md:grid-cols-[220px_minmax(0,1fr)] lg:grid-cols-[220px_minmax(0,1fr)_280px]">
-        <aside className="hidden md:block" data-testid="appshell-sidebar">{sidebar}</aside>
+      <div className="mt-6 grid gap-6 grid-cols-1 lg:grid-cols-[220px_minmax(0,1fr)_280px]">
+        <aside className="hidden lg:block" data-testid="appshell-sidebar">{sidebar}</aside>
         <main data-testid="appshell-main">{main}</main>
         {right && (
           <aside className="hidden lg:block" data-testid="appshell-right">{right}</aside>
         )}
       </div>
+
+      <BottomTabBar />
     </div>
   );
 }
