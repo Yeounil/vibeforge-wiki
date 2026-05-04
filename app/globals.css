@@ -141,6 +141,14 @@ a[data-broken="true"]::after {
   box-shadow: 0 0 0 3px var(--canvas), 0 0 0 5px var(--brand-from);
 }
 
+/* On mobile, hero CTAs stretch to full width inside their stacked column. */
+@media (max-width: 639px) {
+  .btn-hero {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* Primary CTA — light: ink-black pill (editorial). dark: brand-gradient w/ glow. */
 .btn-hero-primary {
   background: var(--ink);
