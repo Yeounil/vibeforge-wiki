@@ -1,8 +1,14 @@
 // components/wiki/WikiPage.tsx
+"use client";
+
+import { useRef } from "react";
 import type { PageFrontmatter } from "@/lib/wiki/types";
 import { Breadcrumb } from "./Breadcrumb";
 import { Prerequisites } from "./Prerequisites";
 import { ChildPages } from "./ChildPages";
+import { MobileStickyTOC } from "./MobileStickyTOC";
+import { WikiPageMeta } from "./WikiPageMeta";
+import type { Heading } from "./TableOfContents";
 
 interface Props {
   slug: string;
@@ -17,6 +23,16 @@ interface Props {
   parentChain: { slug: string; title: string }[];
   prereqItems: { slug: string; title: string }[];
   childItems: { slug: string; title: string }[];
+  /** Pre-extracted headings from bodyHtml (server-side) for the mobile sticky TOC. */
+  headings: Heading[];
+  /** Mobile-only related/Q&A/comments rendering — server-instantiated JSX
+   *  passed through as slot props so this client component never duplicates
+   *  server-only data fetching. */
+  mobileBacklinksSlot: React.ReactNode;
+  mobileRelatedQASlot: React.ReactNode;
+  mobileCommentsSlot: React.ReactNode;
+  backlinksCount: number;
+  relatedQACount: number;
 }
 
 export function WikiPage({
@@ -30,14 +46,31 @@ export function WikiPage({
   parentChain,
   prereqItems,
   childItems,
+  headings,
+  mobileBacklinksSlot,
+  mobileRelatedQASlot,
+  mobileCommentsSlot,
+  backlinksCount,
+  relatedQACount,
 }: Props) {
+  const articleRef = useRef<HTMLElement | null>(null);
+
   const breadcrumbChain = [
     ...parentChain.map((node) => ({ slug: node.slug as string | null, title: node.title })),
     { slug: null as string | null, title: frontmatter.title },
   ];
 
   return (
-    <article className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6 md:p-8">
+    <article
+      ref={articleRef}
+      className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6 md:p-8"
+    >
+      <MobileStickyTOC
+        title={frontmatter.title}
+        headings={headings}
+        containerRef={articleRef}
+      />
+
       <Breadcrumb category={category} categoryLabel={categoryLabel} chain={breadcrumbChain} />
       <header className="mb-6">
         <h1 className="text-3xl font-bold">{frontmatter.title}</h1>
@@ -78,6 +111,14 @@ export function WikiPage({
       <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: bodyHtml }} />
 
       <ChildPages items={childItems} />
+
+      <WikiPageMeta
+        backlinksCount={backlinksCount}
+        relatedQACount={relatedQACount}
+        backlinksSlot={mobileBacklinksSlot}
+        relatedQASlot={mobileRelatedQASlot}
+        commentsSlot={mobileCommentsSlot}
+      />
 
       {editBaseUrl && (
         <p className="mt-8 text-sm">

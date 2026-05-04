@@ -1,4 +1,4 @@
-interface Heading {
+export interface Heading {
   id: string;
   text: string;
   level: 2 | 3;
@@ -25,7 +25,7 @@ function decodeHtmlEntities(input: string): string {
   });
 }
 
-function extractHeadings(html: string): Heading[] {
+export function extractHeadings(html: string): Heading[] {
   const re = /<h([23])\s+id="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g;
   const out: Heading[] = [];
   let m: RegExpExecArray | null;
