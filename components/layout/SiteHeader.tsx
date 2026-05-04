@@ -2,6 +2,7 @@
 import Link from "next/link";
 import type { Route } from "next";
 import { AuthButton } from "./AuthButton";
+import { MobileHeaderControls } from "./MobileHeaderControls";
 import { Card } from "@/components/ui";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { createClient } from "@/lib/supabase/server";
@@ -29,8 +30,8 @@ async function getIsAdmin(): Promise<boolean> {
 export async function SiteHeader({ searchSlot }: Props) {
   const isAdmin = await getIsAdmin();
   return (
-    <Card className="px-6 md:px-8 py-3 md:py-4 flex items-center gap-5 md:gap-7">
-      <div className="flex items-center gap-3">
+    <Card className="px-4 sm:px-6 lg:px-8 py-3 lg:py-4 flex items-center gap-3 lg:gap-7">
+      <div className="flex items-center gap-3 flex-1 lg:flex-initial">
         <Link
           href="/"
           aria-label="VibeForge"
@@ -46,14 +47,14 @@ export async function SiteHeader({ searchSlot }: Props) {
         </span>
       </div>
 
+      {/* Desktop divider + nav + search + auth — hidden on mobile/tablet. */}
       <span
         aria-hidden="true"
-        className="hidden md:block h-6 w-px bg-[var(--hairline)]"
+        className="hidden lg:block h-6 w-px bg-[var(--hairline)]"
       />
-
       <nav
         aria-label="Primary"
-        className="flex gap-5 text-[15px] text-[var(--ink-muted)]"
+        className="hidden lg:flex gap-5 text-[15px] text-[var(--ink-muted)]"
       >
         <Link href="/wiki" className="hover:text-[var(--ink)] transition-colors">
           Wiki
@@ -79,11 +80,15 @@ export async function SiteHeader({ searchSlot }: Props) {
           </Link>
         )}
       </nav>
-
-      {searchSlot && <div className="flex-1 max-w-md">{searchSlot}</div>}
-      <div className={searchSlot ? "" : "ml-auto"}>
+      {searchSlot && (
+        <div className="hidden lg:block flex-1 max-w-md">{searchSlot}</div>
+      )}
+      <div className="hidden lg:block">
         <AuthButton />
       </div>
+
+      {/* Mobile/tablet — hamburger that opens the sheet. */}
+      <MobileHeaderControls isAdmin={isAdmin} searchSlot={searchSlot} />
     </Card>
   );
 }
