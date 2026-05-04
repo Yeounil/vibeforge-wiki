@@ -10,7 +10,7 @@ import { WikiPage } from "@/components/wiki/WikiPage";
 import { AppShell } from "@/components/layout/AppShell";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { RightPanel } from "@/components/layout/RightPanel";
-import { TableOfContents } from "@/components/wiki/TableOfContents";
+import { TableOfContents, extractHeadings } from "@/components/wiki/TableOfContents";
 import { Backlinks } from "@/components/wiki/Backlinks";
 import { RelatedQA } from "@/components/wiki/RelatedQA";
 import { GiscusEmbed } from "@/components/wiki/GiscusEmbed";
@@ -63,6 +63,17 @@ export default async function WikiSlugPage({
     console.error("[RelatedQA load failed]", e);
   }
 
+  const headings = extractHeadings(bundle.bodyHtml);
+
+  // Mobile-only slot nodes. Re-use the same components used in the desktop
+  // right rail / inline below — server-rendered JSX gets passed as props to
+  // the (client) WikiPage which renders them inside <WikiPageMeta>.
+  const mobileBacklinksSlot = (
+    <Backlinks slugs={bundle.backlinks} titleMap={bundle.titleMap} />
+  );
+  const mobileRelatedQASlot = <RelatedQA posts={relatedQA} />;
+  const mobileCommentsSlot = <GiscusEmbed pathname={`/wiki/${fullSlug}`} />;
+
   return (
     <AppShell
       headerSearch={<SearchBox />}
@@ -80,8 +91,16 @@ export default async function WikiSlugPage({
             parentChain={parentChain}
             prereqItems={prereqItems}
             childItems={childItems}
+            headings={headings}
+            mobileBacklinksSlot={mobileBacklinksSlot}
+            mobileRelatedQASlot={mobileRelatedQASlot}
+            mobileCommentsSlot={mobileCommentsSlot}
+            backlinksCount={bundle.backlinks.length}
+            relatedQACount={relatedQA.length}
           />
-          <GiscusEmbed pathname={`/wiki/${fullSlug}`} />
+          <div className="hidden lg:block">
+            <GiscusEmbed pathname={`/wiki/${fullSlug}`} />
+          </div>
         </>
       }
       right={
