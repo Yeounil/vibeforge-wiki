@@ -35,22 +35,27 @@ export default async function WikiIndexPage() {
       sidebar={<Sidebar pages={sidebarPages} tree={hierarchy} currentSlug={null} />}
       main={
         <div className="space-y-6">
-          <header className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6 flex items-start justify-between gap-4">
-            <div>
+          <header className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div className="min-w-0">
               <h1 className="text-3xl font-bold">Wiki</h1>
               <p className="mt-2 text-[var(--ink-muted)]">
                 바이브코더가 알아두면 좋은 CS 지식. 카테고리별로 정리되어 있어요.
               </p>
             </div>
-            <div className="shrink-0 self-center flex flex-wrap gap-2">
+            <div className="flex gap-2 md:shrink-0 md:self-center md:flex-wrap">
               <Link
                 href={"/wiki/graph" as Route}
-                className="px-4 py-2 rounded-md text-sm font-semibold text-white"
+                className="flex-1 md:flex-none inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-semibold text-white text-center"
                 style={{ background: "var(--brand-gradient)" }}
               >
                 그래프뷰 →
               </Link>
-              <Pill href={"/about#위키-로컬로-가져오기" as Route} variant="secondary" size="sm">
+              <Pill
+                href={"/about#위키-로컬로-가져오기" as Route}
+                variant="secondary"
+                size="sm"
+                className="flex-1 md:flex-none"
+              >
                 위키 다운로드
               </Pill>
             </div>
