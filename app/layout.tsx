@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import { BottomTabBar } from "@/components/layout/BottomTabBar";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -34,7 +35,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" className={`${geist.variable} ${geistMono.variable} ${pretendard.variable}`}>
-      <body>{children}</body>
+      <body className="pb-[calc(64px+env(safe-area-inset-bottom))] lg:pb-0">
+        {children}
+        <BottomTabBar />
+      </body>
     </html>
   );
 }
