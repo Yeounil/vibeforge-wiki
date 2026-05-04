@@ -5,20 +5,52 @@
 
 type WordmarkSize = "header" | "hero";
 
-const SIZE_CONFIG: Record<
-  WordmarkSize,
-  { font: string; mark: number; tracking: string; gap: string }
-> = {
-  header: { font: "var(--t-card-title)", mark: 22, tracking: "-0.02em", gap: "gap-2.5" },
-  hero:   { font: "var(--t-display-lg)", mark: 56, tracking: "-0.045em", gap: "gap-5" },
+interface SizeCfg {
+  font: string;
+  /** Fixed mark px (header) or null when responsive (hero). */
+  mark: number | null;
+  /** When mark is null, BrandMark uses an em-based size instead. */
+  markEm?: number;
+  tracking: string;
+  /** Tailwind gap class applied at base; overridden via the second value at sm: */
+  gapBase: string;
+  gapSm?: string;
+}
+
+const SIZE_CONFIG: Record<WordmarkSize, SizeCfg> = {
+  header: {
+    font: "var(--t-card-title)",
+    mark: 22,
+    tracking: "-0.02em",
+    gapBase: "gap-2.5",
+  },
+  hero: {
+    font: "var(--t-display-lg)",
+    // mark scales with the clamped font: 0.875em → ≈ 35px @ 40px font, ≈ 56px @ 64px font.
+    mark: null,
+    markEm: 0.875,
+    tracking: "-0.045em",
+    gapBase: "gap-3",
+    gapSm: "sm:gap-5",
+  },
 };
 
-export function BrandMark({ size = 22 }: { size?: number }) {
+interface BrandMarkProps {
+  size?: number;
+  /** When provided, overrides numeric size with em-based sizing (font-relative). */
+  sizeEm?: number;
+}
+
+export function BrandMark({ size = 22, sizeEm }: BrandMarkProps) {
+  const style = sizeEm !== undefined
+    ? { width: `${sizeEm}em`, height: `${sizeEm}em` }
+    : undefined;
   return (
     <svg
       viewBox="0 0 24 24"
-      width={size}
-      height={size}
+      width={sizeEm !== undefined ? undefined : size}
+      height={sizeEm !== undefined ? undefined : size}
+      style={style}
       aria-hidden="true"
       className="shrink-0"
     >
@@ -40,13 +72,18 @@ export function Wordmark({
   showMark = true,
 }: WordmarkProps) {
   const cfg = SIZE_CONFIG[size];
+  const gapClasses = [cfg.gapBase, cfg.gapSm].filter(Boolean).join(" ");
   return (
     <span
       aria-label="VibeForge"
-      className={`inline-flex items-center ${cfg.gap} leading-none ${className}`}
+      className={`inline-flex items-center ${gapClasses} leading-none ${className}`}
       style={{ fontSize: cfg.font, letterSpacing: cfg.tracking }}
     >
-      {showMark && <BrandMark size={cfg.mark} />}
+      {showMark && (
+        cfg.mark !== null
+          ? <BrandMark size={cfg.mark} />
+          : <BrandMark sizeEm={cfg.markEm} />
+      )}
       <span className="whitespace-nowrap">
         <span style={{ fontWeight: 340 }}>Vibe</span><span
           className="bg-clip-text text-transparent"
