@@ -27,9 +27,17 @@ export function NewPostForm({ defaultCategory = "qa" }: Props) {
       <Card className="space-y-4">
         <PostFormFields defaultCategory={defaultCategory} />
         {error && <p className="text-sm text-red-600">{error}</p>}
-        <Pill type="submit" variant="primary" size="sm" disabled={isPending} className="disabled:opacity-50">
-          {isPending ? "올리는 중…" : "올리기"}
-        </Pill>
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+          <Pill
+            type="submit"
+            variant="primary"
+            size="sm"
+            disabled={isPending}
+            className="disabled:opacity-50 w-full sm:w-auto min-h-[var(--touch-target)]"
+          >
+            {isPending ? "올리는 중…" : "올리기"}
+          </Pill>
+        </div>
       </Card>
     </form>
   );
