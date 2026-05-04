@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { Route } from "next";
 import { AuthButton } from "./AuthButton";
@@ -14,13 +14,28 @@ interface Props {
 }
 
 export function MobileMenu({ open, onClose, isAdmin, children }: Props) {
+  const closeBtnRef = useRef<HTMLButtonElement | null>(null);
+  const triggerElRef = useRef<Element | null>(null);
+
   useEffect(() => {
     if (!open) return;
+    // Save the element that was focused before opening (typically the
+    // hamburger trigger), then move focus into the sheet's close button so
+    // keyboard users land inside the modal.
+    triggerElRef.current = document.activeElement;
+    closeBtnRef.current?.focus();
+
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    return () => {
+      window.removeEventListener("keydown", handler);
+      // Restore focus to the trigger when closing.
+      if (triggerElRef.current instanceof HTMLElement) {
+        triggerElRef.current.focus();
+      }
+    };
   }, [open, onClose]);
 
   if (!open) return null;
@@ -34,8 +49,9 @@ export function MobileMenu({ open, onClose, isAdmin, children }: Props) {
     >
       <button
         type="button"
-        aria-label="Close menu"
+        aria-label="Close menu (backdrop)"
         data-testid="mobilemenu-backdrop"
+        tabIndex={-1}
         className="absolute inset-0 bg-[var(--overlay-scrim)]"
         onClick={onClose}
       />
@@ -45,6 +61,7 @@ export function MobileMenu({ open, onClose, isAdmin, children }: Props) {
             메뉴
           </span>
           <button
+            ref={closeBtnRef}
             type="button"
             aria-label="Close menu"
             onClick={onClose}

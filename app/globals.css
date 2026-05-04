@@ -51,7 +51,11 @@ a[data-broken="true"]::after {
   --tw-prose-quotes: var(--ink-muted);
 }
 
-/* Tables — rounded corners with subtle accent header */
+/* Tables — accent header + scrolls horizontally on overflow.
+   The mobile-responsive overrides (display: block; overflow-x: auto;) live
+   below near the rest of the .prose responsive rules — they intentionally
+   override `overflow: hidden` here because preventing horizontal layout
+   breakage on mobile beats preserving rounded-corner clipping. */
 .prose table {
   border-collapse: collapse;
   border-radius: 8px;
@@ -110,6 +114,14 @@ a[data-broken="true"]::after {
   height: auto;
 }
 
+/* a11y: every keyboard-focused interactive element gets a visible ring even
+   if its component didn't add one. Specificity 0 via :where(...) so any
+   per-component focus rule (e.g. .btn-hero:focus-visible) still wins. */
+:where(a, button, [role="button"], input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--brand-from);
+  outline-offset: 2px;
+}
+
 /* Hero / landing CTAs — each button uses a distinctly different emphasis
    approach in light vs dark mode. Light leans into Figma's editorial
    black-and-white pair; dark leans into our purple/blue brand identity. */
@@ -139,6 +151,14 @@ a[data-broken="true"]::after {
 .btn-hero:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--canvas), 0 0 0 5px var(--brand-from);
+}
+
+/* On mobile, hero CTAs stretch to full width inside their stacked column. */
+@media (max-width: 639px) {
+  .btn-hero {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* Primary CTA — light: ink-black pill (editorial). dark: brand-gradient w/ glow. */
