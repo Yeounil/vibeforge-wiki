@@ -41,6 +41,8 @@
   --s-lg:      24px;
   --s-xl:      32px;
   --s-xxl:     48px;
+  /* === Touch target (WCAG 2.1 SC 2.5.5 minimum) === */
+  --touch-target: 44px;
   --s-section: 96px;
 
   /* === Radius === */
@@ -53,12 +55,15 @@
   --r-full: 9999px;
 
   /* === Typography size scale (Figma display + body) === */
-  --t-display-xl: 86px;   /* hero headlines */
-  --t-display-lg: 64px;   /* section openers */
-  --t-headline:   26px;   /* in-block titles */
-  --t-subhead:    26px;   /* same size, different weight */
+  /* Tokens use clamp(min, prefer, max) so they scale on mobile while remaining
+     pixel-identical to the previous fixed value at desktop widths (the max).
+     At ≥720px the cap engages — desktop visuals unchanged. */
+  --t-display-xl: clamp(40px, 12vw, 86px);   /* hero headlines */
+  --t-display-lg: clamp(40px, 11vw, 64px);   /* section openers */
+  --t-headline:   clamp(22px, 4.5vw, 26px);  /* in-block titles */
+  --t-subhead:    clamp(22px, 4.5vw, 26px);  /* same size, different weight */
   --t-card-title: 24px;
-  --t-body-lg:    20px;
+  --t-body-lg:    clamp(17px, 4vw, 20px);
   --t-body:       18px;
   --t-body-sm:    16px;
   --t-button:     20px;
