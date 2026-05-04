@@ -1,5 +1,4 @@
 // app/wiki/[...slug]/page.tsx
-import { notFound } from "next/navigation";
 import { loadOnePage, getAllSlugs, getAllPages, getHierarchy } from "@/lib/wiki/page-loader";
 import {
   getParentChain,
@@ -27,7 +26,7 @@ export const revalidate = 60;
 export async function generateStaticParams() {
   const slugs = await getAllSlugs();
   return slugs.map((slug) => ({
-    slug: slug.split("/").map(encodeURIComponent),
+    slug: slug.split("/"),
   }));
 }
 
@@ -39,7 +38,12 @@ export default async function WikiSlugPage({
   const { slug } = await params;
   const fullSlug = slug.map(decodeURIComponent).join("/");
   const bundle = await loadOnePage(fullSlug);
-  if (!bundle) notFound();
+  if (!bundle) {
+    // Throw instead of notFound() so ISR keeps the previously cached response
+    // on transient failures rather than caching a 404 for the full revalidate
+    // window (vercel/next.js#79497).
+    throw new Error(`Wiki page not found: ${fullSlug}`);
+  }
 
   const all = await getAllPages();
   const hierarchy = await getHierarchy();
