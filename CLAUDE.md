@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-VibeForge — a Korean-language CS learning + discussion site (Next.js 15 App Router, React 19, TS strict). Site code lives here; **wiki content (markdown vault) is a git submodule mounted at `content/`** from `Yeounil/vibeforge-wiki`. Master spec Phases Plan 1–6 are complete (see `docs/superpowers/plans/` and `docs/superpowers/specs/`).
+VibeForge — a Korean-language CS learning + discussion site (Next.js 16 App Router, React 19, TS strict, Tailwind v4 with CSS-first `@tailwindcss/postcss`). Site code lives here; **wiki content (markdown vault) is a git submodule mounted at `content/`** from `Yeounil/vibeforge-wiki`. Master spec Phases Plan 1–6 are complete plus a 4-phase mobile-first responsive pass (see `docs/superpowers/plans/`, `docs/superpowers/specs/`). Active branches under `mobile-first/phase-*` and `plan*/` are landed/merged history.
 
 ## Commands
 
@@ -48,9 +48,9 @@ Anything that mentions a wiki page in either direction must round-trip through b
 ### Routes
 - `/` — landing page
 - `/wiki` — vault index (tag cloud, recent)
-- `/wiki/[...slug]` — page render + `Backlinks` + `RelatedQA` + `GiscusEmbed` + `TableOfContents`
+- `/wiki/[...slug]` — page render + `Backlinks` + `RelatedQA` + `GiscusEmbed` + `TableOfContents` (desktop right rail) / `MobileStickyTOC` + `WikiPageMeta` segmented control (`<lg`)
 - `/wiki/tag/[tag]`, `/wiki/graph` (force-graph), `/api/search` (minisearch)
-- `/forum`, `/forum/[category]` (`qa | general | notice`), `/forum/post/[id]`, `/forum/new`
+- `/forum`, `/forum/[category]` (`qa | general | notice`), `/forum/post/[id]`, `/forum/post/[id]/edit`, `/forum/new`
 - `/about` (rendered from `site-pages/about.md` via `lib/site-pages/loader.ts`)
 - `/admin` — admin-only profile/role management; non-admins 404
 - `/auth/callback` — Supabase OAuth (GitHub) callback
@@ -68,7 +68,12 @@ Anything that mentions a wiki page in either direction must round-trip through b
 Server Actions only. Identity comes from the cookie-bound server client (`auth.getUser()`); RLS enforces `author_id = auth.uid()`. Validation via Zod (`lib/forum/schemas.ts`). After write: best-effort `syncWikiRefs` (service-role) → `revalidatePath` for the post, the category, `/forum`, and every affected wiki slug.
 
 ### Layout
-`components/layout/AppShell.tsx` is the 3-column shell (header, mobile-collapsible sidebar, main, optional right rail). Most pages compose into this. Design tokens live in `lib/design/tokens.css` and `app/globals.css` (CSS variables like `--bg-gradient`, `--accent-cta`, `vf-card`).
+`components/layout/AppShell.tsx` is the desktop 3-column shell (header, sidebar, main, optional right rail) — sidebar/right rail are `hidden lg:block` on `<lg` viewports. Mobile chrome is mounted in `app/layout.tsx` (root) so it covers pages that bypass AppShell (`/`, `/about`, `/wiki/graph`):
+- `BottomTabBar` (Wiki/Forum/Graph/About) — body has `pb-[64px+safe-area]` to clear it.
+- `MobileHeaderControls` + `MobileMenu` sheet (search/About/Admin/Auth) — replaces the desktop header nav on `<lg`.
+- `MobileStickyTOC` lives inside the wiki page route, not the shell.
+
+Design tokens live in `lib/design/tokens.css` and `app/globals.css` (CSS variables like `--bg-gradient`, `--accent-cta`, `vf-card`). Tailwind v4 uses CSS-first config — no `tailwind.config.*`; theme tokens come from CSS.
 
 ## Conventions
 
