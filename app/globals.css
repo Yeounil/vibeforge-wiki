@@ -51,7 +51,11 @@ a[data-broken="true"]::after {
   --tw-prose-quotes: var(--ink-muted);
 }
 
-/* Tables — rounded corners with subtle accent header */
+/* Tables — accent header + scrolls horizontally on overflow.
+   The mobile-responsive overrides (display: block; overflow-x: auto;) live
+   below near the rest of the .prose responsive rules — they intentionally
+   override `overflow: hidden` here because preventing horizontal layout
+   breakage on mobile beats preserving rounded-corner clipping. */
 .prose table {
   border-collapse: collapse;
   border-radius: 8px;

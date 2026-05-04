@@ -51,9 +51,10 @@ test.describe("mobile shell", () => {
     const dialog = page.getByRole("dialog", { name: "Mobile menu" });
     await expect(dialog).toBeVisible();
     await expect(dialog.getByRole("link", { name: /About/i })).toBeVisible();
-    // Two "Close menu" buttons exist (full-screen backdrop + ✕ in panel header).
-    // The backdrop is occluded by the panel; click the visible ✕ at the end.
-    await dialog.getByRole("button", { name: "Close menu" }).last().click();
+    // Click the canonical close affordance (the ✕ in the panel header). The
+    // backdrop carries a separate aria-label "Close menu (backdrop)" — use
+    // exact match so this lookup resolves only to the panel button.
+    await dialog.getByRole("button", { name: "Close menu", exact: true }).click();
     await expect(dialog).toBeHidden();
   });
 
