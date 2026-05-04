@@ -34,13 +34,13 @@ export function CommentForm({ postId }: Props) {
       <textarea
         name="body_md"
         required
-        rows={3}
+        rows={4}
         maxLength={5000}
         placeholder="댓글을 입력하세요…"
         className="w-full bg-[var(--canvas)] text-[var(--ink)] border border-[var(--hairline)] rounded-[var(--r-md)] px-[var(--s-sm)] py-[var(--s-xs)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-from)] focus:border-transparent text-sm"
       />
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <Pill type="submit" variant="primary" size="sm" disabled={isPending} className="disabled:opacity-50">
+      <Pill type="submit" variant="primary" size="sm" disabled={isPending} className="disabled:opacity-50 w-full sm:w-auto min-h-[var(--touch-target)]">
         {isPending ? "올리는 중…" : "댓글 달기"}
       </Pill>
     </form>

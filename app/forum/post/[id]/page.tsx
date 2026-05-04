@@ -87,10 +87,10 @@ export default async function ForumPostPage({
       main={
         <div className="space-y-4">
           <article className="bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] p-6 md:p-8">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex flex-wrap items-center gap-2 mb-3">
               <CategoryBadge category={post.category} />
               <span className="text-sm text-[var(--ink-muted)]">{authorName}</span>
-              <span className="text-sm text-[var(--ink-muted)] ml-auto">
+              <span className="text-sm text-[var(--ink-muted)] sm:ml-auto">
                 {post.created_at.slice(0, 10)}
               </span>
             </div>
@@ -99,7 +99,7 @@ export default async function ForumPostPage({
                 <PostActions postId={post.id} canEdit={canEdit} canDelete={canDelete} />
               </div>
             )}
-            <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
+            <h1 className="text-2xl font-bold mb-4 break-words">{post.title}</h1>
             <div
               className="prose max-w-none"
               dangerouslySetInnerHTML={{ __html: bodyHtml }}

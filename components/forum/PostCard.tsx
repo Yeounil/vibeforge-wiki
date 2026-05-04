@@ -13,16 +13,24 @@ export function PostCard({ post }: Props) {
   return (
     <Link
       href={`/forum/post/${post.id}` as Route}
-      className="block rounded-[var(--r-md)] p-4 bg-[var(--canvas)] border border-[var(--hairline)] hover:shadow-lg transition"
+      className="
+        block rounded-[var(--r-md)] p-4
+        min-h-[var(--touch-target)]
+        bg-[var(--canvas)] border border-[var(--hairline)]
+        transition
+        hover:shadow-lg
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-from)]
+        active:bg-[var(--hairline-soft)]
+      "
     >
-      <div className="flex items-center gap-2 mb-2">
+      <div className="flex flex-wrap items-center gap-2 mb-2">
         <CategoryBadge category={post.category} />
         <span className="text-xs text-[var(--ink-muted)]">{authorName}</span>
-        <span className="text-xs text-[var(--ink-muted)] ml-auto">
+        <span className="text-xs text-[var(--ink-muted)] sm:ml-auto">
           {post.created_at.slice(0, 10)}
         </span>
       </div>
-      <h3 className="font-semibold text-[var(--ink)]">{post.title}</h3>
+      <h3 className="font-semibold text-[var(--ink)] break-words">{post.title}</h3>
       {post.tags.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1">
           {post.tags.map((t) => (
