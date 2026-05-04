@@ -17,7 +17,8 @@ export function SearchBox() {
 
   useEffect(() => {
     if (!query.trim()) {
-      setHits([]);
+      // Empty query: don't fetch. `displayHits` below derives the empty state
+      // from `query` so we don't need to call setHits() inside the effect.
       return;
     }
     const ctrl = new AbortController();
@@ -58,7 +59,7 @@ export function SearchBox() {
           검색 중…
         </p>
       )}
-      {hits.length > 0 && (
+      {query.trim() && hits.length > 0 && (
         <ul className="absolute z-10 mt-1 w-full bg-[var(--canvas)] border border-[var(--hairline)] rounded-[var(--r-md)] divide-y divide-[var(--hairline)] max-h-80 overflow-auto shadow-lg">
           {hits.map((h) => (
             <li key={h.slug} className="p-3 hover:bg-[var(--surface-soft)]">

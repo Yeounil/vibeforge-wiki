@@ -76,6 +76,10 @@ export function Sidebar({ pages, tree = {}, currentSlug }: Props) {
   const [expanded, setExpanded] = useState<Set<string>>(initialExpanded);
 
   useEffect(() => {
+    // localStorage hydration on mount: cannot run in lazy useState initializer
+    // because this component renders on the server too, where localStorage is
+    // undefined. setState-in-effect is intentional here.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setExpanded((prev) => {
       const next = new Set(prev);
       for (const cat of knownThenRest) {
