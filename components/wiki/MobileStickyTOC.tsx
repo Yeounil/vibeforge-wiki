@@ -50,7 +50,7 @@ export function MobileStickyTOC({ title, headings, containerRef }: Props) {
       </button>
 
       {open && (
-        <div role="dialog" aria-modal="true" aria-label="목차">
+        <>
           <button
             type="button"
             aria-label="Close TOC"
@@ -58,7 +58,12 @@ export function MobileStickyTOC({ title, headings, containerRef }: Props) {
             className="fixed inset-0 z-40 bg-[var(--overlay-scrim)]"
             onClick={() => setOpen(false)}
           />
-          <div className="fixed left-0 right-0 bottom-0 z-50 max-h-[60vh] overflow-y-auto bg-[var(--canvas)] border-t border-[var(--hairline)] rounded-t-2xl shadow-2xl pb-[env(safe-area-inset-bottom)]">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="목차"
+            className="fixed left-0 right-0 bottom-0 z-50 max-h-[60vh] overflow-y-auto bg-[var(--canvas)] border-t border-[var(--hairline)] rounded-t-2xl shadow-2xl pb-[env(safe-area-inset-bottom)]"
+          >
             <div className="flex justify-center pt-2 pb-1" aria-hidden="true">
               <span className="block w-10 h-1 rounded-full bg-[var(--hairline)]" />
             </div>
@@ -84,7 +89,7 @@ export function MobileStickyTOC({ title, headings, containerRef }: Props) {
               ))}
             </ul>
           </div>
-        </div>
+        </>
       )}
     </nav>
   );
