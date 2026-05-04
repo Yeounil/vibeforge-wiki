@@ -61,15 +61,31 @@ describe("promoteUserAction", () => {
 });
 
 describe("demoteUserAction", () => {
-  it("blocks self-demote", async () => {
-    requireAdmin.mockResolvedValue({ id: "a1" });
+  const ADMIN_ID = "11111111-1111-1111-1111-111111111111";
+
+  it("rejects non-uuid target before self-check", async () => {
+    requireAdmin.mockResolvedValue({ id: ADMIN_ID });
     const r = await demoteUserAction("a1");
+    expect(r.ok).toBe(false);
+    expect(r.error).toContain("잘못된");
+  });
+
+  it("blocks self-demote (exact match)", async () => {
+    requireAdmin.mockResolvedValue({ id: ADMIN_ID });
+    const r = await demoteUserAction(ADMIN_ID);
+    expect(r.ok).toBe(false);
+    expect(r.error).toContain("본인");
+  });
+
+  it("blocks self-demote even when targetId case-folded", async () => {
+    requireAdmin.mockResolvedValue({ id: ADMIN_ID });
+    const r = await demoteUserAction(ADMIN_ID.toUpperCase());
     expect(r.ok).toBe(false);
     expect(r.error).toContain("본인");
   });
 
   it("calls service-role update on success", async () => {
-    requireAdmin.mockResolvedValue({ id: "a1" });
+    requireAdmin.mockResolvedValue({ id: ADMIN_ID });
     serviceUpdate.mockReturnValue({ eq: vi.fn().mockResolvedValue({ error: null }) });
     const r = await demoteUserAction("00000000-0000-0000-0000-000000000002");
     expect(r.ok).toBe(true);
